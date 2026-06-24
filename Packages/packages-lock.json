@@ -1,5 +1,56 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e5acc106ee196bc5a32fb14cdf2987b0f96d11e0"
+    },
+    "com.eflatun.scenereference": {
+      "version": "git+https://github.com/starikcetin/Eflatun.SceneReference.git#5.0.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.settings-manager": "2.0.1",
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
+      },
+      "hash": "6821c571090fc0828accced5dbd7635152c23887"
+    },
+    "com.gitamend.improvedtimers": {
+      "version": "https://github.com/adammyhre/Unity-Improved-Timers.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0c93083e7968e5d2a7746b38d6d5a477d2b5b3ac"
+    },
+    "com.gustavopsantos.reflex": {
+      "version": "https://github.com/tnieyu1706/Reflex.git?path=Assets/Reflex",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "73bb85788c3906db802c63df62fb61c7d5416803"
+    },
+    "com.kylewbanks.scenerefattribute": {
+      "version": "git+https://github.com/KyleBanks/scene-ref-attribute.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8d3a0ee421588faaf373e0fe4b8f4577a522f029"
+    },
+    "com.tnieyu1706.projectsetup": {
+      "version": "file:G:/GameDev/Engines/Unity/##Utils",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.tnieyu1706.scenemanagement": {
+      "version": "https://github.com/tnieyu1706/SceneManagent.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "af32c86fc1501e2a24c1158230aa20c6fd7e5dcb"
+    },
     "com.unity.2d.animation": {
       "version": "10.2.2",
       "depth": 1,
@@ -192,6 +243,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.render-pipelines.core": {
       "version": "17.0.4",
       "depth": 1,
@@ -238,6 +296,13 @@
     "com.unity.searcher": {
       "version": "4.9.3",
       "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.settings-manager": {
+      "version": "2.1.0",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

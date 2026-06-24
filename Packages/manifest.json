@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.eflatun.scenereference": "git+https://github.com/starikcetin/Eflatun.SceneReference.git#5.0.0",
+    "com.gitamend.improvedtimers": "https://github.com/adammyhre/Unity-Improved-Timers.git",
+    "com.gustavopsantos.reflex": "https://github.com/tnieyu1706/Reflex.git?path=Assets/Reflex",
+    "com.kylewbanks.scenerefattribute": "git+https://github.com/KyleBanks/scene-ref-attribute.git",
+    "com.tnieyu1706.projectsetup": "file:G:/GameDev/Engines/Unity/##Utils",
+    "com.tnieyu1706.scenemanagement": "https://github.com/tnieyu1706/SceneManagent.git",
     "com.unity.collab-proxy": "2.11.3",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.ide.rider": "3.0.39",
