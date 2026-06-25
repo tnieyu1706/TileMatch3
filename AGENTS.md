@@ -34,6 +34,8 @@ Assets/_Project/       # Main game code
   Prefabs/             # Game object prefabs
   Scenes/              # Unity scenes (SampleScene.unity)
   Scripts/             # C# source code
+    Core/              # Shared/important scripts (services, core systems)
+    Gameplay/          # Scene-specific scripts (HomeScene, etc.)
     Tests/Editor/      # Edit mode tests
     Tests/Runtime/     # Play mode tests
   Settings/            # Project settings
@@ -63,7 +65,7 @@ Test directories exist at `_Project/Scripts/Tests/Editor/` and `Tests/Runtime/` 
 - **CRLF warnings** on `git add` are normal on Windows — `.meta` files and JSON may warn about LF→CRLF conversion
 - **Push**: branch `main` has no upstream until first `git push --set-upstream origin main`
 - **No CI/CD** configured yet
-- **No C# code written yet** — project is in early setup phase with only packages and assets imported
+- **C# code location**: Shared/core systems go in `Scripts/Core/`, scene-specific logic in `Scripts/Gameplay/{SceneName}/`
 - Reflex settings asset at `_Project/Settings/Dependencies/Resources/ReflexSettings.asset`
 - `com.tnieyu1706.projectsetup` is a file-local package (`G:/GameDev/Engines/Unity/##Utils`) — not available outside this machine
 
