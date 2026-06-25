@@ -11,16 +11,29 @@ Tile Match 3 game built with **Unity 6000.0.69f1** (Unity 6), **URP 2D Renderer*
 
 ## Architecture
 
-- **DI**: [Reflex](https://github.com/tnieyu1706/Reflex.git) (Zenject-style DI) — installers in `_Project/Settings/Dependencies/`
+- **DI**: [Reflex](https://github.com/tnieyu1706/Reflex.git) (Zenject-style DI)
+  - **Global installers** → `RootScope.prefab` at `_Project/Settings/Dependencies/`
+  - **Scene-scope installers** → separate GameObject with `ContainerScope` component + installer implementing `IInstaller` (not `MonoInstaller`)
+  - **Binding pattern**: `containerBuilder.RegisterValue(serializedRef)` — never use `FindObjectByType` or `Object.FindFirstObjectByType`
 - **SOAP**: Obvious.Soap for ScriptableObject-driven data architecture
 - **Async**: UniTask throughout (no raw coroutines)
-- **Animation**: LitMotion (lightweight, job-based tweening)
+- **Animation**: LitMotion (lightweight, job-based tweening). Only add animations explicitly specified in GDD docs (`GameDesign/TileMatch3_GDD.docx`)
 - **Scene management**: `com.tnieyu1706.scenemanagement` package — multi-scene additive navigation
 - **Input**: Unity Input System (`InputSystem_Actions.inputactions`)
 - **Custom packages**:
   - `Assets/TnieYuPackage/` — shared Runtime + Editor utilities
   - `com.tnieyu1706.projectsetup` — file-local package for project-wide setup utils
 - **Editor tools**: Odin Inspector (custom Inspector UI), VHierarchy, VFolders, VInspector, VTabs, Better Hierarchy
+
+## Canvas & UI conventions
+
+- **UI System**: uGUI (Canvas-based) with TextMeshPro for text
+- **Canvas**: Screen Space - Overlay, Reference Resolution 1080×1920, Match 0.5
+- **Layer**: UI layer (5) for all Canvas GameObjects
+- **Required components**: Canvas, CanvasScaler, GraphicRaycaster on Canvas; EventSystem + InputSystemUIInputModule in scene
+- **Structure**: UI elements grouped under a parent `RectTransform` with `CanvasGroup` for bulk fade/visibility management
+- **Button text**: Use TextMeshPro as child of Button, not raw Image
+- **Scale**: Use `ConstrainProportionsScale` on UI elements
 
 ## Project layout
 
@@ -66,6 +79,8 @@ Test directories exist at `_Project/Scripts/Tests/Editor/` and `Tests/Runtime/` 
 - **Push**: branch `main` has no upstream until first `git push --set-upstream origin main`
 - **No CI/CD** configured yet
 - **C# code location**: Shared/core systems go in `Scripts/Core/`, scene-specific logic in `Scripts/Gameplay/{SceneName}/`
+- **Reflex DI (scene-scope)**: Create separate GameObject with `ContainerScope` + installer script (not on Canvas). Installer uses `[Serialize Reference]` + `RegisterValue()` — no FindObjectByType.
+- **Unity Events in scene**: Editor serializes method target type correctly only after recompile. If event wiring seems broken, re-check in Inspector after scripts compile.
 - Reflex settings asset at `_Project/Settings/Dependencies/Resources/ReflexSettings.asset`
 - `com.tnieyu1706.projectsetup` is a file-local package (`G:/GameDev/Engines/Unity/##Utils`) — not available outside this machine
 

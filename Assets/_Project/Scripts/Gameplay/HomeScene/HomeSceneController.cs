@@ -1,8 +1,6 @@
-using Cysharp.Threading.Tasks;
 using LitMotion;
 using LitMotion.Extensions;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace TileMatch3.Gameplay.HomeScene
@@ -11,53 +9,12 @@ namespace TileMatch3.Gameplay.HomeScene
     {
         [SerializeField] private RectTransform _logo;
         [SerializeField] private Button _playButton;
+        
+        private float defaultPlayBtnScale;
 
-        private MotionHandle _pulseMotion;
-
-        private void Start()
+        private void Awake()
         {
-            AnimateLogoEntrance();
-            AnimateButtonPulse();
-        }
-
-        private void AnimateLogoEntrance()
-        {
-            _logo.localScale = Vector3.one * 0.8f;
-            var logoCanvasGroup = _logo.GetComponent<CanvasGroup>();
-            if (logoCanvasGroup != null) logoCanvasGroup.alpha = 0f;
-
-            LMotion.Create(0.8f, 1f, 0.5f)
-                .WithEase(Ease.OutBack)
-                .BindToLocalScaleX(_logo);
-
-            LMotion.Create(0.8f, 1f, 0.5f)
-                .WithEase(Ease.OutBack)
-                .BindToLocalScaleY(_logo);
-
-            if (logoCanvasGroup != null)
-            {
-                LMotion.Create(0f, 1f, 0.3f)
-                    .WithDelay(0.1f)
-                    .BindToAlpha(logoCanvasGroup);
-            }
-        }
-
-        private void AnimateButtonPulse()
-        {
-            var h1 = LMotion.Create(1f, 1.05f, 1f)
-                .WithEase(Ease.InOutSine)
-                .BindToLocalScaleXYZ(_playButton.transform);
-
-            var h2 = LMotion.Create(1.05f, 1f, 1f)
-                .WithEase(Ease.InOutSine)
-                .BindToLocalScaleXYZ(_playButton.transform);
-
-            _pulseMotion = LSequence.Create()
-                .Append(h1)
-                .Append(h2)
-                .Run()
-                .Preserve()
-                .AddTo(gameObject);
+            defaultPlayBtnScale = _playButton.transform.localScale.x;
         }
 
         public void OnPlayClicked()
@@ -67,24 +24,16 @@ namespace TileMatch3.Gameplay.HomeScene
 
         public void OnPointerDown()
         {
-            LMotion.Create(1f, 0.92f, 0.1f)
+            LMotion.Create(defaultPlayBtnScale, defaultPlayBtnScale * 0.92f, 0.1f)
                 .WithEase(Ease.InBack)
                 .BindToLocalScaleXYZ(_playButton.transform);
         }
 
         public void OnPointerUp()
         {
-            LMotion.Create(0.92f, 1f, 0.15f)
+            LMotion.Create(defaultPlayBtnScale * 0.92f, defaultPlayBtnScale, 0.15f)
                 .WithEase(Ease.OutBack)
                 .BindToLocalScaleXYZ(_playButton.transform);
-        }
-
-        private void OnDestroy()
-        {
-            if (_pulseMotion.IsActive())
-            {
-                _pulseMotion.Cancel();
-            }
         }
     }
 }
