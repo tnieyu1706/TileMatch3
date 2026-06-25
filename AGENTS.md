@@ -14,10 +14,13 @@ Tile Match 3 game built with **Unity 6000.0.69f1** (Unity 6), **URP 2D Renderer*
 - **DI**: [Reflex](https://github.com/tnieyu1706/Reflex.git) (Zenject-style DI) — installers in `_Project/Settings/Dependencies/`
 - **SOAP**: Obvious.Soap for ScriptableObject-driven data architecture
 - **Async**: UniTask throughout (no raw coroutines)
-- **Scene management**: `com.tnieyu1706.scenemanagement` package
+- **Animation**: LitMotion (lightweight, job-based tweening)
+- **Scene management**: `com.tnieyu1706.scenemanagement` package — multi-scene additive navigation
 - **Input**: Unity Input System (`InputSystem_Actions.inputactions`)
-- **Custom package**: `Assets/TnieYuPackage/` (Runtime + Editor)
-- **Editor tools**: Odin Inspector, VHierarchy, VFolders, VInspector, VTabs, Better Hierarchy
+- **Custom packages**:
+  - `Assets/TnieYuPackage/` — shared Runtime + Editor utilities
+  - `com.tnieyu1706.projectsetup` — file-local package for project-wide setup utils
+- **Editor tools**: Odin Inspector (custom Inspector UI), VHierarchy, VFolders, VInspector, VTabs, Better Hierarchy
 
 ## Project layout
 
@@ -41,7 +44,7 @@ GameDesign/            # Design documents (.docx)
 ## Key dependencies (from `Packages/manifest.json`)
 
 | Package | Purpose |
-|---|---|
+|---|---|---|
 | `com.gustavopsantos.reflex` | DI framework |
 | `com.obvious.soap` (local) | SOAP data architecture |
 | `com.cysharp.unitask` | Async/await |
