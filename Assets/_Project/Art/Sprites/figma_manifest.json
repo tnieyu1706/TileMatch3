@@ -1,0 +1,91 @@
+{
+  "figmaFileKey": "bap0gn3qVgzGKL25aa3kui",
+  "localFolderPath": "Assets/_Project/Art/Sprites",
+  "lastSync": "2026-06-25T05:03:05.0495244Z",
+  "assets": {
+    "2:2": {
+      "name": "hand_point 1",
+      "imageRef": "7898035f27d05a41407737cf550858b7fd138351",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\hand_point 1.png",
+      "pageName": "Game Sheet"
+    },
+    "1:6": {
+      "name": "background 1",
+      "imageRef": "992307edf1e3f8b7f8d6d6b4c507ab1d4bf187c6",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\background 1.png",
+      "pageName": "Game Sheet"
+    },
+    "9:377": {
+      "name": "rack 1",
+      "imageRef": "006aeac9355bf78fc7f7f1ec4f8e522d9442fbda",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\rack 1.png",
+      "pageName": "Game Sheet"
+    },
+    "1:9": {
+      "name": "title 1",
+      "imageRef": "8a0e941acde73e7566aaa7a06b798b2ff3d2b5cd",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\title 1.png",
+      "pageName": "Game Sheet"
+    },
+    "5:120": {
+      "name": "gameplay_background 1",
+      "imageRef": "da7a15aadf4113de22dcc5757a061a114d5357e3",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\gameplay_background 1.png",
+      "pageName": "Game Sheet"
+    },
+    "10:242": {
+      "name": "LevelMap_2 1",
+      "imageRef": "0c8b0f6b9afbaa3f457c312538d35eba537c3c78",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\LevelMap_2 1.png",
+      "pageName": "Game Sheet"
+    },
+    "10:243": {
+      "name": "LevelMap_3 1",
+      "imageRef": "74a011bab186639c38c29c495d313c8824b93efa",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\LevelMap_3 1.png",
+      "pageName": "Game Sheet"
+    },
+    "10:244": {
+      "name": "LevelMap_4 1",
+      "imageRef": "476e4a4591140f9176f89feaaf1b868e4d75f436",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\LevelMap_4 1.png",
+      "pageName": "Game Sheet"
+    },
+    "9:375": {
+      "name": "panel 1",
+      "imageRef": "58f34850414440928d05ae0787437b0848d5bb3b",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\panel 1.png",
+      "pageName": "Game Sheet"
+    },
+    "1:8": {
+      "name": "tile-base 1",
+      "imageRef": "4792f69b007c8f16da74a1d2f2110f1aa6868e86",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\tile-base 1.png",
+      "pageName": "Game Sheet"
+    },
+    "9:380": {
+      "name": "LevelMap_1 1",
+      "imageRef": "bfa17466b040d0a240bed35d6a2f50fc636da36b",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\LevelMap_1 1.png",
+      "pageName": "Game Sheet"
+    },
+    "9:385": {
+      "name": "home_background 1",
+      "imageRef": "7fa164b9365cded0b6dae5f8c6bbe7ebdc7fb523",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\home_background 1.png",
+      "pageName": "Game Sheet"
+    },
+    "12:245": {
+      "name": "fruits_sheet 1",
+      "imageRef": "82ccd965dd9cdef4d416063949d310ac875c345c",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\fruits_sheet 1.png",
+      "pageName": "Game Sheet"
+    },
+    "9:376": {
+      "name": "button 1",
+      "imageRef": "1f0d5b5db6239ad195afa7b12e63ff4baf9d4704",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\button 1.png",
+      "pageName": "Game Sheet"
+    }
+  }
+}

@@ -1,0 +1,442 @@
+fileFormatVersion: 2
+guid: 5f912f42fb847f64cb64c2d714bacf49
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7239151704876476941
+    second: fruits_sheet 1_0
+  - first:
+      213: 7710680066860537464
+    second: fruits_sheet 1_1
+  - first:
+      213: 5634975680402997380
+    second: fruits_sheet 1_2
+  - first:
+      213: 7344643281707306632
+    second: fruits_sheet 1_3
+  - first:
+      213: -4564176602996465665
+    second: fruits_sheet 1_4
+  - first:
+      213: -4706970345650090917
+    second: fruits_sheet 1_5
+  - first:
+      213: 1464413228312142714
+    second: fruits_sheet 1_6
+  - first:
+      213: -2624727689172666644
+    second: fruits_sheet 1_7
+  - first:
+      213: 2885700619260184384
+    second: fruits_sheet 1_8
+  - first:
+      213: 7555857198434012486
+    second: fruits_sheet 1_9
+  - first:
+      213: -4179765997553598891
+    second: fruits_sheet 1_10
+  - first:
+      213: 2868733567092459889
+    second: fruits_sheet 1_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fruits_sheet 1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 235
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f59cab01ed598b90800000000000000
+      internalID: -7239151704876476941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_1
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 235
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87658e9faa6d10b60800000000000000
+      internalID: 7710680066860537464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_2
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 235
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 480c264a684733e40800000000000000
+      internalID: 5634975680402997380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_3
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 235
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88e8f10b62a6de560800000000000000
+      internalID: 7344643281707306632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 118
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fff1f36cf89c8a0c0800000000000000
+      internalID: -4564176602996465665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_5
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 118
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5c8a33c86b7daeb0800000000000000
+      internalID: -4706970345650090917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_6
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 118
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a73ade58214a25410800000000000000
+      internalID: 1464413228312142714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_7
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 118
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce63bb6b218139bd0800000000000000
+      internalID: -2624727689172666644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 047c0239c611c0820800000000000000
+      internalID: 2885700619260184384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_9
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 1
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64dcc3ed61ccbd860800000000000000
+      internalID: 7555857198434012486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_10
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 1
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55ebf8778fc7ef5c0800000000000000
+      internalID: -4179765997553598891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fruits_sheet 1_11
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 1
+        width: 132
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.44}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17909c5eaf9cfc720800000000000000
+      internalID: 2868733567092459889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: fbd0681a87301c346809684cb96ff6e8
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      fruits_sheet 1_0: -7239151704876476941
+      fruits_sheet 1_1: 7710680066860537464
+      fruits_sheet 1_10: -4179765997553598891
+      fruits_sheet 1_11: 2868733567092459889
+      fruits_sheet 1_2: 5634975680402997380
+      fruits_sheet 1_3: 7344643281707306632
+      fruits_sheet 1_4: -4564176602996465665
+      fruits_sheet 1_5: -4706970345650090917
+      fruits_sheet 1_6: 1464413228312142714
+      fruits_sheet 1_7: -2624727689172666644
+      fruits_sheet 1_8: 2885700619260184384
+      fruits_sheet 1_9: 7555857198434012486
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
