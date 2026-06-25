@@ -67,6 +67,44 @@ Test directories exist at `_Project/Scripts/Tests/Editor/` and `Tests/Runtime/` 
 - Reflex settings asset at `_Project/Settings/Dependencies/Resources/ReflexSettings.asset`
 - `com.tnieyu1706.projectsetup` is a file-local package (`G:/GameDev/Engines/Unity/##Utils`) — not available outside this machine
 
+## Scene Layouts (UI Analysis)
+
+Layout analysis documents at `Assets/_Project/Art/Layouts/` for 4 planned scenes:
+
+### HomeScene / MainMenu
+- **Style**: Fullscreen illustration, village/meadow landscape, casual mobile portrait
+- **Layout**: Logo panel (10–55% height) → spacer (55–70%) → PLAY button pill mint-green (70–85%) → decorative flowers footer
+- **Logo**: 3-line "Tile Match Three" with wooden ribbon banner, each word colored (yellow / sky-blue / lime-green), prominent white outline + drop shadow
+- **CTA**: PLAY button — mint gradient (#5DEFA0→#3DD68C), pill shape, soft shadow
+- **No header/footer UI** — everything floats on background art
+
+### GameplayScene / InGame
+- **Style**: Same village background but dimmed (white overlay ~40%) to make game board pop
+- **Layout**: Header bar (0–8%) → Tile Grid 7×7 layered (8–65%) → gap (65–72%) → Collection Slot Bar (72–83%) → Booster Bar (83–97%) → bottom pad
+- **Header**: Level label (mint pill) + 2 action buttons (warm-yellow left, sky-blue right)
+- **Tile Grid**: Multi-layer stacked tiles (irregular shape, not full rectangle); top layer brighter with stronger shadow, lower layers dimmed
+- **Slot Bar**: Wooden plank rail with 7 empty slots + vine decorations at ends
+- **Booster Bar**: 3 empty booster slots at bottom
+
+### LoadingScene / SplashScreen
+- **Style**: Same logo + detailed village background (boat, tower, mailbox), full brightness
+- **Layout**: Logo (5–48%) → scenery gap (48–80%) → progress bar pill (80–90%) → tagline text (90–95%) → bottom pad
+- **Progress bar**: Mint gradient fill + "72%" bold label centered, ivory track, pill shape
+- **Tagline**: Light cyan italic text below bar, cycles tips/lore during loading
+- **Auto-driven**: progress fill and text change by loading progress; auto-fade on 100%
+
+### LevelMapScene
+- PNG reference exists at `Assets/_Project/Art/Layouts/LevelMapScene.png` — no analysis document yet
+
+### Shared Design Tokens
+| Token | Value |
+|-------|-------|
+| Accent colors | Mint-green (#5DEFA0→#3DD68C), warm-yellow, sky-blue, lime-green |
+| Logo style | 3-line colored text + wooden ribbon, white outline + shadow |
+| Background | Illustrated village scene (reused across scenes) |
+| Buttons | Pill shape, rounded_full, soft shadow |
+| Typography | Bold + large/extralarge for headings, bold for labels |
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
