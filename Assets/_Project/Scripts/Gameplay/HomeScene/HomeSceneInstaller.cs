@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace TileMatch3.Gameplay.HomeScene
 {
-    public class HomeSceneInstaller : MonoInstaller
+    public class HomeSceneInstaller : MonoBehaviour, IInstaller
     {
-        public override void InstallBindings()
+        public void InstallBindings(ContainerBuilder containerBuilder)
         {
-            Container.Bind<HomeSceneController>().AsSingle();
+            containerBuilder.RegisterValue(Object.FindFirstObjectByType<HomeSceneController>());
         }
     }
 }
