@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Flexalon;
 using JetBrains.Annotations;
 using TileMatch3.Core.Tile;
 using UnityEngine;
@@ -8,36 +10,41 @@ namespace TileMatch3.Core.BoardSystem
 {
     public class RackController : MonoBehaviour
     {
-        [SerializeField] private Transform rackRoot;
+        [SerializeField] private FlexalonObject slotsFlexalon;
+        [SerializeField] private GameObject slotPrefab;
+        [SerializeField] private Vector2 offset = new(0, 0.1f);
+
         private int slotNumber = 7;
 
         private Vector2[] tilePositions;
         private TileRuntime[] rackTiles;
 
-        public event Action<int, float, float> onRackSetup;
         public event Action onRackFull;
-        
-        public event Action<TileRuntime, Vector2> onTileMoving; 
-        
+
+        public event Action<TileRuntime, Vector2> onTileMoving;
+
         // 3. Sử dụng Func trả về UniTask để Rack chờ UI xử lý xong mới collapse
         public event Func<TileRuntime[], UniTask> onTileMerged;
+
+        public Transform SlotRootTransform => slotsFlexalon.transform;
 
         private int SpecifyInsertSlot(Guid tileId)
         {
             int insertIndex = -1;
             for (int i = 0; i < slotNumber; i++)
             {
-                if (rackTiles[i] == null) 
+                if (rackTiles[i] == null)
                 {
                     if (insertIndex == -1) insertIndex = i;
                     break;
                 }
-                if (tileId == rackTiles[i].TileId) 
+
+                if (tileId == rackTiles[i].TileId)
                 {
-                    insertIndex = i + 1; 
+                    insertIndex = i + 1;
                 }
             }
-            
+
             return Mathf.Clamp(insertIndex, 0, slotNumber - 1);
         }
 
@@ -48,7 +55,7 @@ namespace TileMatch3.Core.BoardSystem
             {
                 if (rackTiles[i] == null) break;
 
-                if (rackTiles[i].TileId != rackTiles[checkIndex].TileId) 
+                if (rackTiles[i].TileId != rackTiles[checkIndex].TileId)
                 {
                     checkIndex = i;
                 }
@@ -56,7 +63,7 @@ namespace TileMatch3.Core.BoardSystem
                 {
                     // Chạy Async nhưng không block thread chính
                     MergeTilesAsync(checkIndex, i + 1).Forget();
-                    return; 
+                    return;
                 }
             }
 
@@ -76,26 +83,32 @@ namespace TileMatch3.Core.BoardSystem
                 mergeRange[i] = rackTiles[startIndex + i];
             }
 
-            // 3. Bắn event và CHỜ đợi UI Animation Merge chạy xong (Tile thu nhỏ biến mất)
-            if (onTileMerged != null)
-            {
-                await onTileMerged.Invoke(mergeRange);
-            }
-
-            // --- Sau khi await xong, các Tile ở Rack mới tiến hành Collapse (dồn trái) ---
+            // --- Xử lí dữ liệu các Tile ở Rack mới tiến hành Collapse (dồn trái) ---
             var endMoveIndex = slotNumber - range;
+            List<(TileRuntime, Vector2)> movedTiles = new();
             for (int i = startIndex; i < endMoveIndex; i++)
             {
                 rackTiles[i] = rackTiles[i + range];
                 if (rackTiles[i] != null)
                 {
-                    onTileMoving?.Invoke(rackTiles[i], tilePositions[i]);
+                    movedTiles.Add((rackTiles[i], tilePositions[i]));
                 }
             }
 
             for (int i = endMoveIndex; i < slotNumber; i++)
             {
                 rackTiles[i] = null;
+            }
+
+            // Bắn event và CHỜ đợi UI Animation Merge chạy xong (Tile thu nhỏ biến mất)
+            if (onTileMerged != null)
+            {
+                await onTileMerged.Invoke(mergeRange);
+            }
+
+            foreach (var tileMove in movedTiles)
+            {
+                onTileMoving?.Invoke(tileMove.Item1, tileMove.Item2);
             }
         }
 
@@ -106,13 +119,14 @@ namespace TileMatch3.Core.BoardSystem
             {
                 if (item == null) return false;
             }
+
             return true;
         }
 
         public void Push(TileRuntime tileRuntime)
         {
             tileRuntime.isOnRack = true;
-            
+
             int index = SpecifyInsertSlot(tileRuntime.TileId);
             ShiftRightOne(index);
 
@@ -161,27 +175,46 @@ namespace TileMatch3.Core.BoardSystem
                     onTileMoving?.Invoke(rackTiles[i], tilePositions[i]);
                 }
             }
-            
+
             rackTiles[slotNumber - 1] = null;
             return poppedTile;
         }
 
-        public void Setup(int rackSlotNumber, float tileSize, float gap)
+        public async void Setup(int quantity, float scale)
         {
-            slotNumber = rackSlotNumber;
-            Vector2 rackPosition = rackRoot.transform.position;
-
+            slotNumber = quantity;
             rackTiles = new TileRuntime[slotNumber];
             tilePositions = new Vector2[slotNumber];
 
-            onRackSetup?.Invoke(rackSlotNumber, tileSize, gap);
+            slotsFlexalon.Scale = Vector2.one * scale;
 
-            float eachWidth = tileSize + gap;
-            float startX = rackPosition.x - (eachWidth * ((float)rackSlotNumber / 2f)) + (eachWidth / 2f);
-
-            for (int i = 0; i < rackSlotNumber; i++)
+            var slotChildren = SlotRootTransform.childCount;
+            if (slotChildren > quantity)
             {
-                tilePositions[i] = new Vector2(startX + (eachWidth * i), rackPosition.y);
+                for (int i = quantity; i < slotChildren; i++)
+                {
+                    SlotRootTransform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                for (int i = slotChildren; i < quantity; i++)
+                {
+                    Instantiate(slotPrefab, SlotRootTransform);
+                }
+            }
+
+            // TODO: active all slot (0 -> quantity - 1) to re-calculate layout and set tilePositions
+            for (var i = 0; i < quantity; i++)
+            {
+                SlotRootTransform.GetChild(i).gameObject.SetActive(true);
+            }
+
+            await UniTask.NextFrame(); // Wait for one frame to ensure layout is updated
+
+            for (var i = 0; i < quantity; i++)
+            {
+                tilePositions[i] = SlotRootTransform.GetChild(i).transform.position + (Vector3)offset * scale;
             }
         }
     }

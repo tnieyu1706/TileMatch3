@@ -8,6 +8,8 @@ namespace TileMatch3.Core.Level
     {
         public static LevelData GenerateLevel(int levelIndex, LevelGeneratorConfig config)
         {
+            // thêm TileShape và cải thiện các việc lựa chọn (easy, medium, hard) dựa trên levelIndex
+            
             LevelData data = new LevelData();
             data.levelIndex = levelIndex;
 
