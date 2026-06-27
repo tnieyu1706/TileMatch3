@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48744f0c476b47eeb9b220ef618bedd0, type: 3}
+  m_Name: Tile_Pear
+  m_EditorClassIdentifier: 
+  id:
+    value: 70acb6bb-fea8-4254-b99d-6c720f46548c
+  tileSprite: {fileID: 2885700619260184384, guid: 5f912f42fb847f64cb64c2d714bacf49, type: 3}

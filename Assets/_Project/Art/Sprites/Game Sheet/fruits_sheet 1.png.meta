@@ -149,12 +149,12 @@ TextureImporter:
       name: fruits_sheet 1_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 235
-        width: 132
-        height: 117
+        x: 23
+        y: 237
+        width: 95
+        height: 102
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5040847, y: 0.45446718}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -171,12 +171,12 @@ TextureImporter:
       name: fruits_sheet 1_1
       rect:
         serializedVersion: 2
-        x: 132
+        x: 141
         y: 235
-        width: 132
-        height: 117
+        width: 109
+        height: 98
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5, y: 0.46}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -193,12 +193,12 @@ TextureImporter:
       name: fruits_sheet 1_2
       rect:
         serializedVersion: 2
-        x: 264
+        x: 283
         y: 235
-        width: 132
-        height: 117
+        width: 98
+        height: 104
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.4957675, y: 0.48849016}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -215,12 +215,12 @@ TextureImporter:
       name: fruits_sheet 1_3
       rect:
         serializedVersion: 2
-        x: 396
+        x: 404
         y: 235
-        width: 132
-        height: 117
+        width: 103
+        height: 101
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5000003, y: 0.48933637}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -237,12 +237,12 @@ TextureImporter:
       name: fruits_sheet 1_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 118
-        width: 132
-        height: 117
+        x: 27
+        y: 123
+        width: 89
+        height: 97
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5, y: 0.46}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -259,12 +259,12 @@ TextureImporter:
       name: fruits_sheet 1_5
       rect:
         serializedVersion: 2
-        x: 132
+        x: 143
         y: 118
-        width: 132
-        height: 117
+        width: 110
+        height: 104
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5, y: 0.46}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -281,12 +281,12 @@ TextureImporter:
       name: fruits_sheet 1_6
       rect:
         serializedVersion: 2
-        x: 264
-        y: 118
-        width: 132
-        height: 117
+        x: 279
+        y: 121
+        width: 95
+        height: 98
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5000003, y: 0.49887288}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -303,12 +303,12 @@ TextureImporter:
       name: fruits_sheet 1_7
       rect:
         serializedVersion: 2
-        x: 396
+        x: 404
         y: 118
-        width: 132
-        height: 117
+        width: 104
+        height: 99
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5000006, y: 0.49848}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -325,12 +325,12 @@ TextureImporter:
       name: fruits_sheet 1_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1
-        width: 132
-        height: 117
+        x: 32
+        y: 13
+        width: 79
+        height: 95
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5, y: 0.46}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -347,12 +347,12 @@ TextureImporter:
       name: fruits_sheet 1_9
       rect:
         serializedVersion: 2
-        x: 132
-        y: 1
-        width: 132
-        height: 117
+        x: 143
+        y: 13
+        width: 110
+        height: 89
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5, y: 0.46}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -369,12 +369,12 @@ TextureImporter:
       name: fruits_sheet 1_10
       rect:
         serializedVersion: 2
-        x: 264
-        y: 1
-        width: 132
-        height: 117
+        x: 279
+        y: 12
+        width: 98
+        height: 90
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.5, y: 0.46}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -391,12 +391,12 @@ TextureImporter:
       name: fruits_sheet 1_11
       rect:
         serializedVersion: 2
-        x: 396
-        y: 1
-        width: 132
-        height: 117
+        x: 414
+        y: 8
+        width: 84
+        height: 98
       alignment: 9
-      pivot: {x: 0.5, y: 0.44}
+      pivot: {x: 0.4596881, y: 0.46}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
