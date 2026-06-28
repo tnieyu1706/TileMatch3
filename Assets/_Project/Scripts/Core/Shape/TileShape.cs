@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace TileMatch3.Core.Shape
@@ -11,6 +12,12 @@ namespace TileMatch3.Core.Shape
         // Unity không serialize được mảng 2 chiều, nên ta dùng mảng 1 chiều và ẩn nó đi
         [HideInInspector]
         public bool[] gridData;
+        
+        public int GetActiveTileCount()
+        {
+            if (gridData == null) return 0;
+            return gridData.Count(isActive => isActive);
+        }
 
         /// <summary>
         /// Lấy giá trị tại tọa độ x, y

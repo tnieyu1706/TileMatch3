@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a751762e1d6628e4c8f5b1616e300bb9, type: 3}
-  m_Name: Square_8x8
+  m_Name: Diamond_6x6
   m_EditorClassIdentifier: 
-  width: 5
-  height: 5
-  gridData: 01010101010101010101010101010101010101010101010101
+  width: 6
+  height: 6
+  gridData: 000001010000000101010100010101010101010101010101000101010100000001010000

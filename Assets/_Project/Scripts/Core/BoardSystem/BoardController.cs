@@ -1,31 +1,44 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Pool;
+using Reflex.Attributes;
+using TileMatch3.Core.Global;
+using Sirenix.OdinInspector;
 using TileMatch3.Core.Level;
 using TileMatch3.Core.Tile;
+using TileMatch3.Gameplay.GameplayScene;
+using UnityEngine;
+using UnityEngine.Pool;
+using Random = UnityEngine.Random;
 
 namespace TileMatch3.Core.BoardSystem
 {
     public class BoardController : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private RackController rackController;
+        [Header("References")] [Inject]
+        private RackController rackController;
+
+        [Header("Board Settings")] [Inject]
+        private GlobalGameplayDataVariable dataVariable;
+
         [SerializeField] private TileRuntime tilePrefab;
         [SerializeField] private Transform boardRoot;
 
-        private List<TileRuntime> activeTilesOnBoard = new List<TileRuntime>();
-        private LevelData currentLevelData;
-        private LevelGeneratorConfig currentConfig; // Tham chiếu đến config pool
-        
+        private LevelGeneratorConfig currentConfig;
+        private readonly List<TileRuntime> activeTilesOnBoard = new List<TileRuntime>();
+
         private ObjectPool<TileRuntime> tilePool;
+
+        [Header("View")] [SerializeField, ReadOnly]
+        private LevelData currentLevelData;
 
         private void Awake()
         {
             tilePool = new ObjectPool<TileRuntime>(
                 createFunc: () => Instantiate(tilePrefab, boardRoot),
-                actionOnGet: (tile) => { 
-                    tile.gameObject.SetActive(true); 
-                    tile.ResetTile(); 
+                actionOnGet: (tile) =>
+                {
+                    tile.gameObject.SetActive(true);
+                    tile.ResetTile();
                 },
                 actionOnRelease: (tile) => tile.gameObject.SetActive(false),
                 actionOnDestroy: (tile) => Destroy(tile.gameObject),
@@ -40,41 +53,61 @@ namespace TileMatch3.Core.BoardSystem
             currentConfig = config;
             ClearBoard();
 
-            int totalActiveCells = 0;
-            foreach (var shape in levelData.layerShapes)
-            {
-                if (shape.gridData == null) continue;
-                foreach (bool isActive in shape.gridData)
-                {
-                    if (isActive) totalActiveCells++;
-                }
-            }
+            // 1. Tính toán toàn bộ các vị trí hợp lệ trên Board (Có zic-zac offset)
+            List<Vector3> boardPositions = GetBoardTilePositions(levelData);
 
-            int remainder = totalActiveCells % 3;
-            if (remainder != 0)
-                totalActiveCells -= remainder;
+            // 2. Spawn các cục Tile rỗng ra bàn dựa theo position
+            SpawnEmptyTiles(boardPositions);
 
-            // 4. Cho phép bốc ngẫu nhiên từ TẤT CẢ các loại Tile có trong config
-            List<TileData> generatedTileData = GenerateTilePairs(totalActiveCells, config.allAvailableTileTypes);
-            ShuffleList(generatedTileData);
-            SpawnTiles(levelData, generatedTileData);
-            
+            // 3. Chuẩn bị Data (Từng bộ 3) và gán vào các Tile rỗng trên bàn
+            AssignTileDataAndShuffle();
+
+            // 4. Cập nhật trạng thái che khuất
             RefreshBoardState();
         }
 
-        private List<TileData> GenerateTilePairs(int totalTiles, TileData[] availableTypes)
+        /// <summary>
+        /// Trả về danh sách vị trí chính xác của từng Tile. 
+        /// Số lượng phần tử trả về sẽ MẶC ĐỊNH BẰNG ĐÚNG levelData.totalTileCount.
+        /// </summary>
+        private List<Vector3> GetBoardTilePositions(LevelData levelData)
         {
-            List<TileData> dataList = new List<TileData>();
-            int tripletCount = totalTiles / 3;
+            List<Vector3> positions = new List<Vector3>();
+            int tilesNeeded = levelData.totalTileCount;
 
-            for (int i = 0; i < tripletCount; i++)
+            for (int layer = 0; layer < levelData.layerShapes.Length; layer++)
             {
-                TileData randomType = availableTypes[Random.Range(0, availableTypes.Length)];
-                dataList.Add(randomType);
-                dataList.Add(randomType);
-                dataList.Add(randomType);
+                var shape = levelData.layerShapes[layer];
+
+                // Random lệch x, y cho các layer cao (từ layer 1 trở lên) để tạo zic-zac
+                float randomOffsetX = layer == 0 ? 0f : GetRandomOffset(currentConfig.defaultTileSize.x);
+                float randomOffsetY = layer == 0 ? 0f : GetRandomOffset(currentConfig.defaultTileSize.y);
+
+                float startX = -(shape.width * currentConfig.defaultTileSize.x) / 2f +
+                               (currentConfig.defaultTileSize.x / 2f);
+                float startY = (shape.height * currentConfig.defaultTileSize.y) / 2f -
+                               (currentConfig.defaultTileSize.y / 2f);
+
+                for (int y = 0; y < shape.height; y++)
+                {
+                    for (int x = 0; x < shape.width; x++)
+                    {
+                        if (shape.GetCell(x, y))
+                        {
+                            if (positions.Count >= tilesNeeded)
+                                return positions; // Đã gom đủ tọa độ cần thiết, dừng luôn.
+
+                            float posX = startX + (x * currentConfig.defaultTileSize.x) + randomOffsetX;
+                            float posY = startY - (y * currentConfig.defaultTileSize.y) + randomOffsetY;
+                            float posZ = -layer;
+
+                            positions.Add(new Vector3(posX, posY, posZ));
+                        }
+                    }
+                }
             }
-            return dataList;
+
+            return positions;
         }
 
         private float GetRandomOffset(float size)
@@ -85,56 +118,89 @@ namespace TileMatch3.Core.BoardSystem
             return offset * sign * size;
         }
 
-        private void SpawnTiles(LevelData levelData, List<TileData> shuffledData)
+        private void SpawnEmptyTiles(List<Vector3> positions)
         {
-            int dataIndex = 0;
-
-            for (int layer = 0; layer < levelData.layerShapes.Length; layer++)
+            for (int i = 0; i < positions.Count; i++)
             {
-                var shape = levelData.layerShapes[layer];
-                
-                float randomOffsetX = layer == 0 ? 0f : GetRandomOffset(currentConfig.defaultTileSize.x);
-                float randomOffsetY = layer == 0 ? 0f : GetRandomOffset(currentConfig.defaultTileSize.y);
+                Vector3 pos = positions[i];
+                TileRuntime newTile = tilePool.Get();
 
-                float startX = -(shape.width * currentConfig.defaultTileSize.x) / 2f + (currentConfig.defaultTileSize.x / 2f);
-                float startY = (shape.height * currentConfig.defaultTileSize.y) / 2f - (currentConfig.defaultTileSize.y / 2f);
+                newTile.transform.position = pos;
+                newTile.transform.localScale =
+                    new Vector3(currentConfig.defaultTileSize.x, currentConfig.defaultTileSize.y, 1f);
 
-                for (int y = 0; y < shape.height; y++)
-                {
-                    for (int x = 0; x < shape.width; x++)
-                    {
-                        if (shape.GetCell(x, y))
-                        {
-                            if (dataIndex >= shuffledData.Count) return;
+                int layer = Mathf.Abs(Mathf.RoundToInt(pos.z));
+                newTile.name = $"Tile_L{layer}_{i}";
+                newTile.Pool = tilePool;
+                newTile.OnTileClicked += HandleTileClicked;
 
-                            float posX = startX + (x * currentConfig.defaultTileSize.x) + randomOffsetX;
-                            float posY = startY - (y * currentConfig.defaultTileSize.y) + randomOffsetY;
-                            
-                            // 2. Chuyển Z thành nguyên túc (1 layer = 1 đơn vị Z)
-                            float posZ = -layer; 
-
-                            Vector3 finalPos = new Vector3(posX, posY, posZ);
-
-                            TileRuntime newTile = tilePool.Get();
-                            newTile.transform.position = finalPos;
-                            
-                            // 1. Gán kích thước (Scale) cho object
-                            newTile.transform.localScale = new Vector3(currentConfig.defaultTileSize.x, currentConfig.defaultTileSize.y, 1f);
-                            
-                            newTile.name = $"Tile_L{layer}_{x}_{y}";
-                            newTile.Pool = tilePool; 
-                            
-                            // 2. Truyền layer vào SetData để set Render Order
-                            newTile.SetData(shuffledData[dataIndex], layer);
-                            
-                            newTile.OnTileClicked += HandleTileClicked;
-
-                            activeTilesOnBoard.Add(newTile);
-                            dataIndex++;
-                        }
-                    }
-                }
+                activeTilesOnBoard.Add(newTile);
             }
+        }
+
+        private void AssignTileDataAndShuffle()
+        {
+            // 1. Tạo danh sách TileData theo từng cụm 3
+            List<TileData> generatedDataList = new List<TileData>();
+            int tripletCount = activeTilesOnBoard.Count / 3;
+
+            for (int i = 0; i < tripletCount; i++)
+            {
+                TileData randomType =
+                    currentConfig.allAvailableTileTypes[Random.Range(0, currentConfig.allAvailableTileTypes.Length)];
+                generatedDataList.Add(randomType);
+                generatedDataList.Add(randomType);
+                generatedDataList.Add(randomType);
+            }
+
+            // 2. Gán Data tuần tự vào các Tile trên bàn
+            for (int i = 0; i < activeTilesOnBoard.Count; i++)
+            {
+                int layer = Mathf.Abs(Mathf.RoundToInt(activeTilesOnBoard[i].transform.position.z));
+                activeTilesOnBoard[i].SetData(generatedDataList[i], layer);
+            }
+
+            // 3. Đảo vị trí (Shuffle) dữ liệu của các Tile trên bàn
+            ShuffleBoard();
+        }
+
+        /// <summary>
+        /// Hàm này có thể được gọi lại sau này như một Power-Up trong game.
+        /// Nó sẽ lấy toàn bộ Data của các ngói đang nằm trên bàn, xáo trộn, và gán lại.
+        /// </summary>
+        public void ShuffleBoard()
+        {
+            // Lấy tất cả dữ liệu (Id và Sprite) của các tile đang nằm trên bàn (chưa vào Rack)
+            List<TileData> currentDataOnBoard = new List<TileData>();
+
+            // Note: Cần cẩn thận ở đây, TileData struct/class hiện tại không lưu trữ trong TileRuntime.
+            // Để đơn giản, ta sẽ lưu lại một mảng ánh xạ TileData tạm từ iconIdRenderer hoặc thêm thuộc tính Data vào TileRuntime.
+            // Nếu bạn có tham chiếu đến Data gốc trong TileRuntime, bạn có thể lấy thẳng. 
+            // Ở đây tôi dùng hàm Shuffle trực tiếp danh sách TileRuntime rồi hoán đổi thuộc tính.
+
+            List<TileData> extractedData = new List<TileData>();
+            foreach (var tile in activeTilesOnBoard)
+            {
+                // Tái tạo lại TileData tạm thời để hoán đổi. 
+                // Tốt nhất: Trong TileRuntime nên có biến `public TileData OriginalData { get; private set; }`
+                TileData temp = ScriptableObject.CreateInstance<TileData>();
+                temp.id = tile.TileId;
+                temp.tileSprite = tile.GetSprite(); // Thêm hàm GetSprite() vào TileRuntime hoặc truy cập public
+                extractedData.Add(temp);
+            }
+
+            // Xáo trộn danh sách Data
+            ShuffleList(extractedData);
+
+            // Gán ngược lại
+            for (int i = 0; i < activeTilesOnBoard.Count; i++)
+            {
+                int layer = Mathf.Abs(Mathf.RoundToInt(activeTilesOnBoard[i].transform.position.z));
+                activeTilesOnBoard[i].SetData(extractedData[i], layer);
+            }
+
+            // Xóa rác
+            foreach (var temp in extractedData) Destroy(temp);
         }
 
         private void HandleTileClicked(TileRuntime clickedTile)
@@ -143,20 +209,21 @@ namespace TileMatch3.Core.BoardSystem
 
             clickedTile.OnTileClicked -= HandleTileClicked;
             activeTilesOnBoard.Remove(clickedTile);
-            
+
             rackController.Push(clickedTile);
             RefreshBoardState();
 
             if (activeTilesOnBoard.Count == 0)
             {
                 Debug.Log("Board Clear! You Win!");
+                dataVariable?.Value.onGameWin?.Invoke();
             }
         }
 
         private void RefreshBoardState()
         {
             Vector2 tileSize = currentConfig.defaultTileSize;
-            float epsilon = 0.05f; 
+            float epsilon = 0.05f;
 
             foreach (var bottomTile in activeTilesOnBoard)
             {
@@ -172,7 +239,7 @@ namespace TileMatch3.Core.BoardSystem
                         if (distX < (tileSize.x - epsilon) && distY < (tileSize.y - epsilon))
                         {
                             isCovered = true;
-                            break; 
+                            break;
                         }
                     }
                 }
@@ -200,6 +267,7 @@ namespace TileMatch3.Core.BoardSystem
             {
                 if (tile != null) tilePool.Release(tile);
             }
+
             activeTilesOnBoard.Clear();
         }
     }

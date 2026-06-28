@@ -17,6 +17,9 @@ namespace TileMatch3.Core.Tile
         public bool isOnRack;
         public TileState CurrentState { get; private set; }
 
+        // Lưu giữ tham chiếu đến Data gốc để xài cho hàm ShuffleBoard
+        public TileData CurrentTileData { get; private set; }
+
         [SerializeField] private SpriteRenderer baseTileRenderer;
         [SerializeField] private SpriteRenderer iconIdRenderer;
 
@@ -29,16 +32,21 @@ namespace TileMatch3.Core.Tile
         {
             isOnRack = false;
             OnTileClicked = null;
+            CurrentTileData = null;
         }
 
         public void SetData(TileData tileData, int layer)
         {
+            CurrentTileData = tileData; // Lưu lại để Shuffle
             iconIdRenderer.sprite = tileData.tileSprite;
             TileId = tileData.id;
 
             // Xử lý Render Order: Nền = layer * 2, Icon = layer * 2 + 1 để không bị đè xuyên
             SetSortingOrder(layer * 2);
         }
+
+        // Helper cho hàm Shuffle
+        public Sprite GetSprite() => iconIdRenderer.sprite;
 
         public void SetState(TileState state)
         {

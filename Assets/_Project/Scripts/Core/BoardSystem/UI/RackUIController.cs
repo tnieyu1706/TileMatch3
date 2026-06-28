@@ -1,16 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
-using LitMotion;
-using LitMotion.Extensions;
 using TileMatch3.Core.Tile;
 using Cysharp.Threading.Tasks;
+using Reflex.Attributes;
+using TileMatch3.Core.BoardSystem.Animations;
 
 namespace TileMatch3.Core.BoardSystem
 {
     public class RackUIController : MonoBehaviour
     {
-        [SerializeField] private RackController rackController;
-        [SerializeField] private float moveDuration = 0.2f;
-        [SerializeField] private float mergeDuration = 0.2f;
+        [Inject] private RackController rackController;
+        [SerializeField] private float moveDuration = 0.25f;
+        [SerializeField] private float mergeDuration = 0.25f;
+
+        [Header("Animation Strategies")]
+        // Sử dụng List với SerializeReference để Odin hiển thị danh sách đa hình
+        [SerializeReference]
+        private List<IMoveAnimStrategy> moveStrategies = new();
+
+        [SerializeReference] private List<IMergeAnimStrategy> mergeStrategies = new();
 
         private void OnEnable()
         {
@@ -26,34 +34,25 @@ namespace TileMatch3.Core.BoardSystem
 
         private void HandleTileMoving(TileRuntime tile, Vector2 targetPos)
         {
-            tile.SetSortingOrder(100); 
-
-            LMotion.Create(tile.transform.position, new Vector3(targetPos.x, targetPos.y, tile.transform.position.z), moveDuration)
-                .WithEase(Ease.OutQuad)
-                .BindToPosition(tile.transform);
+            if (moveStrategies != null && moveStrategies.Count > 0)
+            {
+                // Chọn ngẫu nhiên 1 strategy từ danh sách
+                var randomStrategy = moveStrategies[UnityEngine.Random.Range(0, moveStrategies.Count)];
+                randomStrategy.PlayMoveAnimation(tile, targetPos, moveDuration).Forget();
+            }
         }
 
         private async UniTask HandleTileMerged(TileRuntime[] mergedTiles)
         {
-            // Mất moveDuration giây đầu tiên để các tile ổn định vị trí trên Rack nếu nó đang bay từ Board xuống
+            // Mất moveDuration giây đầu tiên để các tile bay ổn định vào Rack
             await UniTask.Delay(System.TimeSpan.FromSeconds(moveDuration));
 
-            foreach (var tile in mergedTiles)
+            if (mergeStrategies != null && mergeStrategies.Count > 0)
             {
-                LMotion.Create(tile.transform.localScale, Vector3.zero, mergeDuration)
-                    .WithEase(Ease.InBack)
-                    .WithOnComplete(() =>
-                    {
-                        if (tile.Pool != null) 
-                            tile.Pool.Release(tile); 
-                        else 
-                            Destroy(tile.gameObject);
-                    })
-                    .BindToLocalScale(tile.transform);
+                // Chọn ngẫu nhiên 1 strategy để merge
+                var randomStrategy = mergeStrategies[UnityEngine.Random.Range(0, mergeStrategies.Count)];
+                await randomStrategy.PlayMergeAnimation(mergedTiles, mergeDuration);
             }
-
-            // Chờ animation thu nhỏ hoàn tất
-            await UniTask.Delay(System.TimeSpan.FromSeconds(mergeDuration));
         }
     }
 }

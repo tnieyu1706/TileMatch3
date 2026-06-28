@@ -1,7 +1,7 @@
 {
   "figmaFileKey": "bap0gn3qVgzGKL25aa3kui",
   "localFolderPath": "Assets/_Project/Art/Sprites",
-  "lastSync": "2026-06-25T05:03:05.0495244Z",
+  "lastSync": "2026-06-28T17:46:57.6021927Z",
   "assets": {
     "2:2": {
       "name": "hand_point 1",
@@ -85,6 +85,12 @@
       "name": "button 1",
       "imageRef": "1f0d5b5db6239ad195afa7b12e63ff4baf9d4704",
       "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\button 1.png",
+      "pageName": "Game Sheet"
+    },
+    "25:246": {
+      "name": "fail 1",
+      "imageRef": "88e711033be8d8e7ecbebb8dcbeecb9734e4ebb6",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\fail 1.png",
       "pageName": "Game Sheet"
     }
   }

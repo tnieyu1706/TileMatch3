@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allAvailableShapes:
   - {fileID: 11400000, guid: bd8839ccda4b5f3438653211f63d7095, type: 2}
+  - {fileID: 11400000, guid: 0d084efbc1dea0445b0834669b7d78b1, type: 2}
+  - {fileID: 11400000, guid: 16fc4ea2208d2414d8ea54a9c5157f89, type: 2}
   allAvailableTileTypes:
   - {fileID: 11400000, guid: 8970a04c2da93464aa79391ae8ea0623, type: 2}
   - {fileID: 11400000, guid: 3860bb37c2b9dc4468c3b9c06ab52a48, type: 2}

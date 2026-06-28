@@ -1,27 +1,40 @@
-using UnityEngine;
+using Reflex.Attributes;
+using TileMatch3.Core.Global;
 using TileMatch3.Core.BoardSystem;
 using TileMatch3.Core.Level;
+using UnityEngine;
 
 namespace TileMatch3.Gameplay.GameplayScene
 {
     public class GameplayStarter : MonoBehaviour
     {
-        [Header("System References")] [SerializeField]
-        private BoardController boardController;
+        [Header("System References")] [Inject] private BoardController boardController;
 
-        [SerializeField] private RackController rackController;
+        [Inject] private RackController rackController;
 
-        [Header("Level Configuration")] [SerializeField]
+        [Header("Level Configuration")] [Inject]
         private LevelGeneratorConfig levelConfig;
 
-        [SerializeField] private int startLevel = 1;
+        [Inject] private GlobalGameplayDataVariable dataVariable;
 
         [Header("Rack Settings")] [SerializeField]
         private int rackSlotNumber = 7;
 
+        private void Awake()
+        {
+            // TODO: register onWin, onLose handler for gameplay events
+            dataVariable.Value.onPlayGame.AddListener(StartGame);
+        }
+
+        private void OnDestroy()
+        {
+            // TODO: un-register onWin, onLose handler for gameplay events
+            dataVariable.Value.onPlayGame.RemoveListener(StartGame);
+        }
+
         private void Start()
         {
-            StartGame(startLevel);
+            StartGame(dataVariable.Value.level);
         }
 
         public void StartGame(int levelIndex)
