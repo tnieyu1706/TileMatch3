@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using LitMotion.Extensions;
+using TileMatch3.Core.EffectSystem.Commands;
 using TileMatch3.Core.Tile;
-using Object = UnityEngine.Object;
+using UnityEngine;
 
 namespace TileMatch3.Core.BoardSystem.Animations
 {
@@ -20,31 +20,27 @@ namespace TileMatch3.Core.BoardSystem.Animations
         [Tooltip("Loại Ease khi thu nhỏ / gộp")]
         public Ease mergeEase = Ease.InBack;
 
-        [Tooltip("Prefab hiệu ứng nổ (VFX) khi merge thành công")]
-        public GameObject mergeVfxPrefab;
+        [Tooltip("Danh sách các Effect (VFX, SFX...) phát ra tại tâm khi merge thành công")] [SerializeReference]
+        public List<IEffectCommand> mergeEffects = new List<IEffectCommand>();
 
         public async UniTask PlayMergeAnimation(TileRuntime[] mergedTiles, float duration)
         {
             if (mergedTiles == null || mergedTiles.Length != 3) return;
 
-            // Xác định tile ở giữa (Thường là phần tử thứ 1 trong mảng 3 phần tử)
-            Vector3 centerPos = mergedTiles[1].transform.position;
-
-            // Đẩy Z lên để không bị che khuất khi gom vào nhau
+            var mainTile = mergedTiles[1];
+            Vector3 centerPos = mainTile.transform.position;
             centerPos.z -= 1f;
 
             List<UniTask> animationTasks = new List<UniTask>();
 
             foreach (var tile in mergedTiles)
             {
-                // 1. Animation di chuyển tụ vào điểm giữa
                 var moveTask = LMotion.Create(tile.transform.position, centerPos, duration)
                     .WithEase(Ease.InQuad)
                     .BindToPosition(tile.transform)
                     .ToUniTask();
                 animationTasks.Add(moveTask);
 
-                // 2. Animation thu nhỏ (Scale) về 0
                 var scaleTask = LMotion.Create(tile.transform.localScale, Vector3.zero, duration)
                     .WithEase(mergeEase)
                     .BindToLocalScale(tile.transform)
@@ -52,29 +48,17 @@ namespace TileMatch3.Core.BoardSystem.Animations
                 animationTasks.Add(scaleTask);
             }
 
-            // Chờ cho TẤT CẢ các hiệu ứng gom và thu nhỏ hoàn tất đồng thời
             await UniTask.WhenAll(animationTasks);
 
-            // 3. Play VFX tại tâm điểm
-            if (mergeVfxPrefab != null)
+            Debug.Log("Play MergeToCenter Animation...");
+            // Truyền trực tiếp vào Execute
+            if (mergeEffects != null && mergeEffects.Count > 0)
             {
-                // Instantiate VFX (Có thể dùng Object Pool cho VFX sau này)
-                GameObject vfx = Object.Instantiate(mergeVfxPrefab, centerPos, Quaternion.identity);
-                // Giả định VFX có gắn script tự huỷ hoặc tự dùng ParticleSystem.Destroy
-                Object.Destroy(vfx, 2f);
-            }
-
-            // 4. Dọn dẹp Data
-            foreach (var tile in mergedTiles)
-            {
-                // Reset lại Scale trước khi trả về Pool để lần sau spawn ra không bị tàng hình
-                tile.transform.localScale = Vector3.one;
-                tile.transform.localRotation = Quaternion.identity;
-
-                if (tile.Pool != null)
-                    tile.Pool.Release(tile);
-                else
-                    Object.Destroy(tile.gameObject);
+                Debug.Log($"Play Merge with Color {mainTile.MainColor}");
+                foreach (var effectCmd in mergeEffects)
+                {
+                    effectCmd.Execute(centerPos, 1f, mainTile.MainColor);
+                }
             }
         }
     }
@@ -82,21 +66,22 @@ namespace TileMatch3.Core.BoardSystem.Animations
     [Serializable]
     public class MergeAndFlyUpStrategy : IMergeAnimStrategy
     {
-        [Tooltip("Prefab hiệu ứng VFX")] public GameObject mergeVfxPrefab;
-
         [Tooltip("Độ cao bay lên trước khi biến mất")]
         public float flyUpDistance = 1.5f;
+
+        [Tooltip("Danh sách các Effect phát ra lúc chạm nhau ở giữa")] [SerializeReference]
+        public List<IEffectCommand> mergeEffects = new List<IEffectCommand>();
 
         public async UniTask PlayMergeAnimation(TileRuntime[] mergedTiles, float duration)
         {
             if (mergedTiles == null || mergedTiles.Length != 3) return;
 
-            Vector3 centerPos = mergedTiles[1].transform.position;
+            var mainTile = mergedTiles[1];
+            Vector3 centerPos = mainTile.transform.position;
             centerPos.z -= 1f;
 
             List<UniTask> animationTasks = new List<UniTask>();
 
-            // 1. Gom vào giữa và hơi tụt xuống lấy đà (Anticipation)
             foreach (var tile in mergedTiles)
             {
                 var moveTask = LMotion.Create(tile.transform.position, centerPos + Vector3.down * 0.2f, duration * 0.4f)
@@ -109,14 +94,15 @@ namespace TileMatch3.Core.BoardSystem.Animations
             await UniTask.WhenAll(animationTasks);
             animationTasks.Clear();
 
-            // Play VFX lúc chạm nhau
-            if (mergeVfxPrefab != null)
+            // Truyền trực tiếp vào Execute
+            if (mergeEffects != null)
             {
-                GameObject vfx = Object.Instantiate(mergeVfxPrefab, centerPos, Quaternion.identity);
-                Object.Destroy(vfx, 2f);
+                foreach (var effectCmd in mergeEffects)
+                {
+                    effectCmd.Execute(centerPos, 1f, mainTile.CurrentTileData.mainColor);
+                }
             }
 
-            // 2. Bay vút lên trên và thu nhỏ dần
             foreach (var tile in mergedTiles)
             {
                 var flyTask = LMotion.Create(tile.transform.position, centerPos + Vector3.up * flyUpDistance,
@@ -134,16 +120,66 @@ namespace TileMatch3.Core.BoardSystem.Animations
             }
 
             await UniTask.WhenAll(animationTasks);
+        }
+    }
 
-            // Dọn dẹp Data
+    [Serializable]
+    public class MergeDissolveStrategy : IMergeAnimStrategy
+    {
+        [Tooltip("Loại Ease khi dissolve/thu nhỏ tại chỗ")]
+        public Ease dissolveEase = Ease.InBack;
+
+        [Tooltip("Hiệu ứng gọi 1 LẦN DUY NHẤT (Thường dùng cho SFX, Shake...)")] [SerializeReference]
+        public List<IEffectCommand> centerEffects = new List<IEffectCommand>();
+
+        [Tooltip("Hiệu ứng gọi trên TỪNG TILE (Thường dùng cho VFX nổ từng cục)")] [SerializeReference]
+        public List<IEffectCommand> perTileEffects = new List<IEffectCommand>();
+
+        public async UniTask PlayMergeAnimation(TileRuntime[] mergedTiles, float duration)
+        {
+            if (mergedTiles == null || mergedTiles.Length == 0) return;
+
+            List<UniTask> animationTasks = new List<UniTask>();
+
+            Vector3 centerPos = Vector3.zero;
             foreach (var tile in mergedTiles)
             {
-                tile.transform.localScale = Vector3.one;
-                tile.transform.localRotation = Quaternion.identity;
-
-                if (tile.Pool != null) tile.Pool.Release(tile);
-                else Object.Destroy(tile.gameObject);
+                centerPos += tile.transform.position;
             }
+
+            centerPos /= mergedTiles.Length;
+
+            // Truyền trực tiếp vào Execute
+            if (centerEffects != null)
+            {
+                foreach (var cmd in centerEffects)
+                {
+                    cmd.Execute(centerPos, duration, mergedTiles[0].MainColor);
+                }
+            }
+
+            foreach (var tile in mergedTiles)
+            {
+                var scaleTask = LMotion.Create(tile.transform.localScale, Vector3.zero, duration)
+                    .WithEase(dissolveEase)
+                    .BindToLocalScale(tile.transform)
+                    .ToUniTask();
+                animationTasks.Add(scaleTask);
+
+                // Truyền trực tiếp vào Execute
+                if (perTileEffects != null)
+                {
+                    Vector3 vfxPos = tile.transform.position;
+                    vfxPos.z -= 1f;
+
+                    foreach (var cmd in perTileEffects)
+                    {
+                        cmd.Execute(vfxPos, 1f, tile.CurrentTileData.mainColor);
+                    }
+                }
+            }
+
+            await UniTask.WhenAll(animationTasks);
         }
     }
 }

@@ -1,7 +1,7 @@
 {
   "figmaFileKey": "bap0gn3qVgzGKL25aa3kui",
   "localFolderPath": "Assets/_Project/Art/Sprites",
-  "lastSync": "2026-06-28T17:46:57.6021927Z",
+  "lastSync": "2026-06-29T08:48:36.0315855Z",
   "assets": {
     "2:2": {
       "name": "hand_point 1",
@@ -91,6 +91,12 @@
       "name": "fail 1",
       "imageRef": "88e711033be8d8e7ecbebb8dcbeecb9734e4ebb6",
       "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\fail 1.png",
+      "pageName": "Game Sheet"
+    },
+    "27:2": {
+      "name": "merge_effects_sheet 1",
+      "imageRef": "23101d8d45a7c732bfecf0a3448576a527589f0b",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\merge_effects_sheet 1.png",
       "pageName": "Game Sheet"
     }
   }

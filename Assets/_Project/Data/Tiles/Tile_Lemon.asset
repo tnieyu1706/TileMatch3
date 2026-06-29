@@ -15,3 +15,4 @@ MonoBehaviour:
   id:
     value: 9bdefa8d-37c5-421d-8511-831442b2f0e9
   tileSprite: {fileID: -2624727689172666644, guid: 5f912f42fb847f64cb64c2d714bacf49, type: 3}
+  mainColor: {r: 1, g: 0.9058824, b: 0.027450982, a: 1}

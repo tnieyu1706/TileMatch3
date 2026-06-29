@@ -13,12 +13,14 @@ namespace TileMatch3.Core.Tile
 
     public class TileRuntime : MonoBehaviour, IPointerDownHandler
     {
-        public Guid TileId;
         public bool isOnRack;
         public TileState CurrentState { get; private set; }
 
         // Lưu giữ tham chiếu đến Data gốc để xài cho hàm ShuffleBoard
+        [field:SerializeField]
         public TileData CurrentTileData { get; private set; }
+        public Guid TileId => CurrentTileData.id;
+        public Color MainColor => CurrentTileData.mainColor;
 
         [SerializeField] private SpriteRenderer baseTileRenderer;
         [SerializeField] private SpriteRenderer iconIdRenderer;
@@ -39,7 +41,6 @@ namespace TileMatch3.Core.Tile
         {
             CurrentTileData = tileData; // Lưu lại để Shuffle
             iconIdRenderer.sprite = tileData.tileSprite;
-            TileId = tileData.id;
 
             // Xử lý Render Order: Nền = layer * 2, Icon = layer * 2 + 1 để không bị đè xuyên
             SetSortingOrder(layer * 2);

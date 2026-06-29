@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Obvious.Soap;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,8 +9,8 @@ namespace TileMatch3.Core.Global
     [Serializable]
     public class GlobalGameplayData
     {
-        public UnityEvent onGameWin;
-        public UnityEvent onGameLose;
+        public Func<UniTask> onGameWin;
+        public Func<UniTask> onGameLose;
         public UnityEvent<int> onPlayGame;
 
         public int level;

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Reflex.Attributes;
-using TileMatch3.Core.Global;
 using Sirenix.OdinInspector;
+using TileMatch3.Core.Global;
 using TileMatch3.Core.Level;
 using TileMatch3.Core.Tile;
-using TileMatch3.Gameplay.GameplayScene;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
@@ -14,11 +13,9 @@ namespace TileMatch3.Core.BoardSystem
 {
     public class BoardController : MonoBehaviour
     {
-        [Header("References")] [Inject]
-        private RackController rackController;
+        [Header("References")] [Inject] private RackController rackController;
 
-        [Header("Board Settings")] [Inject]
-        private GlobalGameplayDataVariable dataVariable;
+        [Header("Board Settings")] [Inject] private GlobalGameplayDataVariable dataVariable;
 
         [SerializeField] private TileRuntime tilePrefab;
         [SerializeField] private Transform boardRoot;
@@ -30,6 +27,9 @@ namespace TileMatch3.Core.BoardSystem
 
         [Header("View")] [SerializeField, ReadOnly]
         private LevelData currentLevelData;
+
+        public event Action<List<TileRuntime>> OnBoardGenerated;
+        public event Action<List<TileRuntime>, bool> OnBoardShuffling;
 
         private void Awake()
         {
@@ -51,6 +51,7 @@ namespace TileMatch3.Core.BoardSystem
         {
             currentLevelData = levelData;
             currentConfig = config;
+
             ClearBoard();
 
             // 1. Tính toán toàn bộ các vị trí hợp lệ trên Board (Có zic-zac offset)
@@ -58,12 +59,13 @@ namespace TileMatch3.Core.BoardSystem
 
             // 2. Spawn các cục Tile rỗng ra bàn dựa theo position
             SpawnEmptyTiles(boardPositions);
-
+            
             // 3. Chuẩn bị Data (Từng bộ 3) và gán vào các Tile rỗng trên bàn
             AssignTileDataAndShuffle();
 
             // 4. Cập nhật trạng thái che khuất
             RefreshBoardState();
+            OnBoardGenerated?.Invoke(activeTilesOnBoard);
         }
 
         /// <summary>
@@ -168,39 +170,29 @@ namespace TileMatch3.Core.BoardSystem
         /// Hàm này có thể được gọi lại sau này như một Power-Up trong game.
         /// Nó sẽ lấy toàn bộ Data của các ngói đang nằm trên bàn, xáo trộn, và gán lại.
         /// </summary>
-        public void ShuffleBoard()
+        public void ShuffleBoard(bool playEffect = false)
         {
-            // Lấy tất cả dữ liệu (Id và Sprite) của các tile đang nằm trên bàn (chưa vào Rack)
-            List<TileData> currentDataOnBoard = new List<TileData>();
+            OnBoardShuffling?.Invoke(activeTilesOnBoard, playEffect);
 
-            // Note: Cần cẩn thận ở đây, TileData struct/class hiện tại không lưu trữ trong TileRuntime.
-            // Để đơn giản, ta sẽ lưu lại một mảng ánh xạ TileData tạm từ iconIdRenderer hoặc thêm thuộc tính Data vào TileRuntime.
-            // Nếu bạn có tham chiếu đến Data gốc trong TileRuntime, bạn có thể lấy thẳng. 
-            // Ở đây tôi dùng hàm Shuffle trực tiếp danh sách TileRuntime rồi hoán đổi thuộc tính.
-
+            // 1. Lấy danh sách các THAM CHIẾU (references) đến file ScriptableObject gốc đang nằm trên bàn
             List<TileData> extractedData = new List<TileData>();
             foreach (var tile in activeTilesOnBoard)
             {
-                // Tái tạo lại TileData tạm thời để hoán đổi. 
-                // Tốt nhất: Trong TileRuntime nên có biến `public TileData OriginalData { get; private set; }`
-                TileData temp = ScriptableObject.CreateInstance<TileData>();
-                temp.id = tile.TileId;
-                temp.tileSprite = tile.GetSprite(); // Thêm hàm GetSprite() vào TileRuntime hoặc truy cập public
-                extractedData.Add(temp);
+                // Vì CurrentTileData là reference đến file Asset thật, ta chỉ cần nhét nó vào list
+                extractedData.Add(tile.CurrentTileData);
             }
 
-            // Xáo trộn danh sách Data
+            // 2. Xáo trộn danh sách tham chiếu này
             ShuffleList(extractedData);
 
-            // Gán ngược lại
+            // 3. Gán ngược lại Data cho các Tile trên bàn
             for (int i = 0; i < activeTilesOnBoard.Count; i++)
             {
                 int layer = Mathf.Abs(Mathf.RoundToInt(activeTilesOnBoard[i].transform.position.z));
                 activeTilesOnBoard[i].SetData(extractedData[i], layer);
             }
 
-            // Xóa rác
-            foreach (var temp in extractedData) Destroy(temp);
+            // Xong! Không cần phải xoá temp data nữa vì chúng ta dùng thẳng hàng real.
         }
 
         private void HandleTileClicked(TileRuntime clickedTile)

@@ -29,38 +29,20 @@ MonoBehaviour:
   _guid: 424fe6007043adb4789648523fd1a61e
   _saveGuid: 0
   _value:
-    onGameWin:
-      m_PersistentCalls:
-        m_Calls: []
-    onGameLose:
-      m_PersistentCalls:
-        m_Calls: []
     onPlayGame:
       m_PersistentCalls:
         m_Calls: []
-    level: 8
+    level: 17
   _debugLogEnabled: 0
   _saved: 1
   _defaultValue:
-    onGameWin:
-      m_PersistentCalls:
-        m_Calls: []
-    onGameLose:
-      m_PersistentCalls:
-        m_Calls: []
     onPlayGame:
       m_PersistentCalls:
         m_Calls: []
     level: 0
   _resetOn: 1
   _runtimeValue:
-    onGameWin:
-      m_PersistentCalls:
-        m_Calls: []
-    onGameLose:
-      m_PersistentCalls:
-        m_Calls: []
     onPlayGame:
       m_PersistentCalls:
         m_Calls: []
-    level: 3
+    level: 16

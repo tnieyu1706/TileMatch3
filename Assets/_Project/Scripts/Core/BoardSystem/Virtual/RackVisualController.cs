@@ -7,7 +7,7 @@ using TileMatch3.Core.BoardSystem.Animations;
 
 namespace TileMatch3.Core.BoardSystem
 {
-    public class RackUIController : MonoBehaviour
+    public class RackVisualController : MonoBehaviour
     {
         [Inject] private RackController rackController;
         [SerializeField] private float moveDuration = 0.25f;
@@ -32,13 +32,13 @@ namespace TileMatch3.Core.BoardSystem
             rackController.onTileMerged -= HandleTileMerged;
         }
 
-        private void HandleTileMoving(TileRuntime tile, Vector2 targetPos)
+        private void HandleTileMoving(TileRuntime tile, Vector2 targetPos, bool isPlayEffect)
         {
             if (moveStrategies != null && moveStrategies.Count > 0)
             {
                 // Chọn ngẫu nhiên 1 strategy từ danh sách
                 var randomStrategy = moveStrategies[UnityEngine.Random.Range(0, moveStrategies.Count)];
-                randomStrategy.PlayMoveAnimation(tile, targetPos, moveDuration).Forget();
+                randomStrategy.PlayMoveAnimation(tile, targetPos, moveDuration, isPlayEffect).Forget();
             }
         }
 
@@ -50,7 +50,7 @@ namespace TileMatch3.Core.BoardSystem
             if (mergeStrategies != null && mergeStrategies.Count > 0)
             {
                 // Chọn ngẫu nhiên 1 strategy để merge
-                var randomStrategy = mergeStrategies[UnityEngine.Random.Range(0, mergeStrategies.Count)];
+                var randomStrategy = mergeStrategies[Random.Range(0, mergeStrategies.Count)];
                 await randomStrategy.PlayMergeAnimation(mergedTiles, mergeDuration);
             }
         }
