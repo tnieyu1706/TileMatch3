@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 6306255188555527059}
   - component: {fileID: 2140747941231006416}
   - component: {fileID: 2561110868871473158}
+  - component: {fileID: 4010255852362332229}
   m_Layer: 7
   m_Name: Tile
   m_TagString: Untagged
@@ -208,7 +209,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -275,3 +276,30 @@ MonoBehaviour:
   isOnRack: 0
   baseTileRenderer: {fileID: 153029965894176871}
   iconIdRenderer: {fileID: 155442063737103468}
+  <CurrentState>k__BackingField: 0
+  <CurrentTileData>k__BackingField: {fileID: 0}
+--- !u!114 &4010255852362332229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5644969869537107930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32271d264bca40d881aa6d96f3c4738b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileRuntime: {fileID: 2561110868871473158}
+  wobbleAngle: 15
+  wobbleDuration: 0.35
+  onInvalidClickEffects:
+  - rid: 1154141535254610021
+  references:
+    version: 2
+    RefIds:
+    - rid: 1154141535254610021
+      type: {class: SFXCommand, ns: TileMatch3.Core.EffectSystem.Commands, asm: Assembly-CSharp}
+      data:
+        sfxClip: {fileID: 8300000, guid: 7f24fc74a56b65046b156a91e08aa219, type: 3}
+        volume: 1

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Reflex.Attributes;
 using Sirenix.OdinInspector;
 using TileMatch3.Core.Global;
@@ -8,6 +9,8 @@ using TileMatch3.Core.Tile;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
+
+// Cần thêm để dùng UniTask trong Event
 
 namespace TileMatch3.Core.BoardSystem
 {
@@ -28,8 +31,14 @@ namespace TileMatch3.Core.BoardSystem
         [Header("View")] [SerializeField, ReadOnly]
         private LevelData currentLevelData;
 
+        public event Action OnPreBoardGenerating;
+        
+        // Thêm event báo hiệu Board đã tạo xong (truyền List Tile qua để diễn)
         public event Action<List<TileRuntime>> OnBoardGenerated;
-        public event Action<List<TileRuntime>, bool> OnBoardShuffling;
+        
+        public event Action OnBoardShuffling;
+        // Event truyền List Tile và 1 Action logic (chứa lệnh tráo data) sang cho Visual Controller
+        public event Func<List<TileRuntime>, Action, UniTask> OnBoardShufflingAnim;
 
         private void Awake()
         {
@@ -52,6 +61,8 @@ namespace TileMatch3.Core.BoardSystem
             currentLevelData = levelData;
             currentConfig = config;
 
+            OnPreBoardGenerating?.Invoke();
+
             ClearBoard();
 
             // 1. Tính toán toàn bộ các vị trí hợp lệ trên Board (Có zic-zac offset)
@@ -59,19 +70,17 @@ namespace TileMatch3.Core.BoardSystem
 
             // 2. Spawn các cục Tile rỗng ra bàn dựa theo position
             SpawnEmptyTiles(boardPositions);
-            
+
             // 3. Chuẩn bị Data (Từng bộ 3) và gán vào các Tile rỗng trên bàn
             AssignTileDataAndShuffle();
 
             // 4. Cập nhật trạng thái che khuất
             RefreshBoardState();
+
+            // 5. Bắn event cho Visual Controller diễn Animation Introduce
             OnBoardGenerated?.Invoke(activeTilesOnBoard);
         }
 
-        /// <summary>
-        /// Trả về danh sách vị trí chính xác của từng Tile. 
-        /// Số lượng phần tử trả về sẽ MẶC ĐỊNH BẰNG ĐÚNG levelData.totalTileCount.
-        /// </summary>
         private List<Vector3> GetBoardTilePositions(LevelData levelData)
         {
             List<Vector3> positions = new List<Vector3>();
@@ -81,7 +90,6 @@ namespace TileMatch3.Core.BoardSystem
             {
                 var shape = levelData.layerShapes[layer];
 
-                // Random lệch x, y cho các layer cao (từ layer 1 trở lên) để tạo zic-zac
                 float randomOffsetX = layer == 0 ? 0f : GetRandomOffset(currentConfig.defaultTileSize.x);
                 float randomOffsetY = layer == 0 ? 0f : GetRandomOffset(currentConfig.defaultTileSize.y);
 
@@ -97,7 +105,7 @@ namespace TileMatch3.Core.BoardSystem
                         if (shape.GetCell(x, y))
                         {
                             if (positions.Count >= tilesNeeded)
-                                return positions; // Đã gom đủ tọa độ cần thiết, dừng luôn.
+                                return positions; 
 
                             float posX = startX + (x * currentConfig.defaultTileSize.x) + randomOffsetX;
                             float posY = startY - (y * currentConfig.defaultTileSize.y) + randomOffsetY;
@@ -114,7 +122,6 @@ namespace TileMatch3.Core.BoardSystem
 
         private float GetRandomOffset(float size)
         {
-            // Trả về ngẫu nhiên khoảng [0.2 đến 0.5] hoặc [-0.5 đến -0.2]
             float offset = Random.Range(0.2f, 0.5f);
             float sign = Random.value > 0.5f ? 1f : -1f;
             return offset * sign * size;
@@ -142,7 +149,6 @@ namespace TileMatch3.Core.BoardSystem
 
         private void AssignTileDataAndShuffle()
         {
-            // 1. Tạo danh sách TileData theo từng cụm 3
             List<TileData> generatedDataList = new List<TileData>();
             int tripletCount = activeTilesOnBoard.Count / 3;
 
@@ -155,44 +161,61 @@ namespace TileMatch3.Core.BoardSystem
                 generatedDataList.Add(randomType);
             }
 
-            // 2. Gán Data tuần tự vào các Tile trên bàn
             for (int i = 0; i < activeTilesOnBoard.Count; i++)
             {
                 int layer = Mathf.Abs(Mathf.RoundToInt(activeTilesOnBoard[i].transform.position.z));
                 activeTilesOnBoard[i].SetData(generatedDataList[i], layer);
             }
 
-            // 3. Đảo vị trí (Shuffle) dữ liệu của các Tile trên bàn
-            ShuffleBoard();
+            // Dùng hàm Shuffle ẩn (không bắn event Anim) để xáo trộn data lúc khởi tạo Board
+            PerformShuffleLogic();
         }
 
         /// <summary>
-        /// Hàm này có thể được gọi lại sau này như một Power-Up trong game.
-        /// Nó sẽ lấy toàn bộ Data của các ngói đang nằm trên bàn, xáo trộn, và gán lại.
+        /// Tách logic đảo Data ra riêng để tái sử dụng
         /// </summary>
-        public void ShuffleBoard(bool playEffect = false)
+        private void PerformShuffleLogic()
         {
-            OnBoardShuffling?.Invoke(activeTilesOnBoard, playEffect);
-
-            // 1. Lấy danh sách các THAM CHIẾU (references) đến file ScriptableObject gốc đang nằm trên bàn
             List<TileData> extractedData = new List<TileData>();
             foreach (var tile in activeTilesOnBoard)
             {
-                // Vì CurrentTileData là reference đến file Asset thật, ta chỉ cần nhét nó vào list
                 extractedData.Add(tile.CurrentTileData);
             }
 
-            // 2. Xáo trộn danh sách tham chiếu này
             ShuffleList(extractedData);
 
-            // 3. Gán ngược lại Data cho các Tile trên bàn
             for (int i = 0; i < activeTilesOnBoard.Count; i++)
             {
                 int layer = Mathf.Abs(Mathf.RoundToInt(activeTilesOnBoard[i].transform.position.z));
                 activeTilesOnBoard[i].SetData(extractedData[i], layer);
             }
+        }
 
-            // Xong! Không cần phải xoá temp data nữa vì chúng ta dùng thẳng hàng real.
+        /// <summary>
+        /// Hàm này gọi bằng Power-Up: Có bắn event Animation
+        /// </summary>
+        [Button]
+        public async void ShuffleBoard()
+        {
+            OnBoardShuffling?.Invoke(); // Vẫn giữ cho các UI khác lắng nghe
+
+            // Gói toàn bộ logic tráo data + refresh trạng thái vào 1 Action
+            Action shuffleLogic = () => 
+            {
+                PerformShuffleLogic();
+                RefreshBoardState();
+            };
+
+            if (OnBoardShufflingAnim != null)
+            {
+                // Truyền Action sang bên Visual để nó tự canh thời gian kích hoạt (lúc đã thu nhỏ xong)
+                await OnBoardShufflingAnim.Invoke(activeTilesOnBoard, shuffleLogic);
+            }
+            else
+            {
+                // Fallback nếu không gắn visual
+                shuffleLogic.Invoke();
+            }
         }
 
         private void HandleTileClicked(TileRuntime clickedTile)

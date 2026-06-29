@@ -14,18 +14,21 @@ namespace TileMatch3.Core.Tile
     public class TileRuntime : MonoBehaviour, IPointerDownHandler
     {
         public bool isOnRack;
-        public TileState CurrentState { get; private set; }
-
-        // Lưu giữ tham chiếu đến Data gốc để xài cho hàm ShuffleBoard
-        [field:SerializeField]
-        public TileData CurrentTileData { get; private set; }
-        public Guid TileId => CurrentTileData.id;
-        public Color MainColor => CurrentTileData.mainColor;
 
         [SerializeField] private SpriteRenderer baseTileRenderer;
         [SerializeField] private SpriteRenderer iconIdRenderer;
 
+        // Lưu giữ tham chiếu đến Data gốc để xài cho hàm ShuffleBoard
+        [Header("Read-Only")]
+        [field: SerializeField]
+        public TileState CurrentState { get; private set; }
+
+        [field: SerializeField] public TileData CurrentTileData { get; private set; }
+        public Guid TileId => CurrentTileData.id;
+        public Color MainColor => CurrentTileData.mainColor;
+
         public event Action<TileRuntime> OnTileClicked;
+        public event Action<TileRuntime> OnTileNotAllowClicked;
 
         // Reference tới Pool để có thể tự release chính mình
         public IObjectPool<TileRuntime> Pool { get; set; }
@@ -46,9 +49,6 @@ namespace TileMatch3.Core.Tile
             SetSortingOrder(layer * 2);
         }
 
-        // Helper cho hàm Shuffle
-        public Sprite GetSprite() => iconIdRenderer.sprite;
-
         public void SetState(TileState state)
         {
             CurrentState = state;
@@ -67,9 +67,17 @@ namespace TileMatch3.Core.Tile
         {
             if (isOnRack) return;
 
-            if (CurrentState == TileState.Normal)
+            switch (CurrentState)
             {
-                OnTileClicked?.Invoke(this);
+                case TileState.Normal:
+                    OnTileClicked?.Invoke(this);
+                    break;
+                case TileState.Hidden:
+                    // Bắn event báo hiệu Tile đang bị ẩn mà người chơi vẫn cố click
+                    OnTileNotAllowClicked?.Invoke(this);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

@@ -32,8 +32,7 @@ namespace TileMatch3.Core.EffectSystem
             {
                 _animator.speed = 1 / lifeTime;
             }
-
-            Debug.Log($"Color: {mainColor}");
+            
             _spriteRenderer.color = mainColor;
 
             // Chờ VFX chạy xong (tương đương với việc đợi để Destroy như code cũ)

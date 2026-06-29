@@ -9,6 +9,6 @@ namespace TileMatch3.Core.Tile
         public SerializableGuid id = Guid.NewGuid();
         public Sprite tileSprite;
 
-        public Color mainColor = Color.red;
+        public Color mainColor = Color.white;
     }
 }

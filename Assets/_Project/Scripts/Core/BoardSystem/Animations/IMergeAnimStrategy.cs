@@ -54,7 +54,6 @@ namespace TileMatch3.Core.BoardSystem.Animations
             // Truyền trực tiếp vào Execute
             if (mergeEffects != null && mergeEffects.Count > 0)
             {
-                Debug.Log($"Play Merge with Color {mainTile.MainColor}");
                 foreach (var effectCmd in mergeEffects)
                 {
                     effectCmd.Execute(centerPos, 1f, mainTile.MainColor);
