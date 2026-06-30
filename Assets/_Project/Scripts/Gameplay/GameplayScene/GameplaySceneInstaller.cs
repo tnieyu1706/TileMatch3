@@ -1,6 +1,7 @@
 using Reflex.Core;
 using TileMatch3.Core.BoardSystem;
 using TileMatch3.Core.Global;
+using TileMatch3.Core.IdleAnimationSystem;
 using TileMatch3.Core.Level;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace TileMatch3.Gameplay.GameplayScene
         [Header("Gameplay References")]
         [SerializeField] private BoardController boardController;
         [SerializeField] private RackController rackController;
+        [SerializeField] private IdleAnimationController idleAnimationController;
 
         public void InstallBindings(ContainerBuilder containerBuilder)
         {
@@ -23,6 +25,7 @@ namespace TileMatch3.Gameplay.GameplayScene
             
             containerBuilder.RegisterValue(boardController);
             containerBuilder.RegisterValue(rackController);
+            containerBuilder.RegisterValue(idleAnimationController);
         }
     }
 }

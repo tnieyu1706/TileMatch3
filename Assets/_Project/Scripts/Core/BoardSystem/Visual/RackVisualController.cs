@@ -32,13 +32,13 @@ namespace TileMatch3.Core.BoardSystem
             rackController.onTileMerged -= HandleTileMerged;
         }
 
-        private void HandleTileMoving(TileRuntime tile, Vector2 targetPos, bool isPlayEffect)
+        private void HandleTileMoving(TileRuntime tile, Vector2 targetPos, float delay, bool isPlayEffect)
         {
             if (moveStrategies != null && moveStrategies.Count > 0)
             {
                 // Chọn ngẫu nhiên 1 strategy từ danh sách
                 var randomStrategy = moveStrategies[UnityEngine.Random.Range(0, moveStrategies.Count)];
-                randomStrategy.PlayMoveAnimation(tile, targetPos, moveDuration, isPlayEffect).Forget();
+                randomStrategy.PlayMoveAnimation(tile, targetPos, moveDuration, delay, isPlayEffect).Forget();
             }
         }
 

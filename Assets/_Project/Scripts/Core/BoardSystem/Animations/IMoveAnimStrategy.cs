@@ -11,7 +11,7 @@ namespace TileMatch3.Core.BoardSystem.Animations
 {
     public interface IMoveAnimStrategy
     {
-        UniTask PlayMoveAnimation(TileRuntime tile, Vector2 targetPos, float duration, bool isPlayEffect);
+        UniTask PlayMoveAnimation(TileRuntime tile, Vector2 targetPos, float duration, float delay, bool isPlayEffect);
     }
 
     [Serializable]
@@ -28,7 +28,8 @@ namespace TileMatch3.Core.BoardSystem.Animations
         [Tooltip("Danh sách các Effect phát ra khi bắt đầu bay")] [SerializeReference]
         public List<IEffectCommand> onStartEffects = new List<IEffectCommand>();
 
-        public async UniTask PlayMoveAnimation(TileRuntime tile, Vector2 targetPos, float duration, bool isPlayEffect)
+        public async UniTask PlayMoveAnimation(TileRuntime tile, Vector2 targetPos, float duration, float delay,
+            bool isPlayEffect)
         {
             // 0. Thực thi Effect ngay khi bắt đầu
             if (isPlayEffect && onStartEffects != null)
@@ -38,16 +39,8 @@ namespace TileMatch3.Core.BoardSystem.Animations
                     cmd.Execute(tile.transform.position, duration, tile.CurrentTileData.mainColor);
                 }
             }
-
-            // 1. Set sorting order để luôn nằm trên cùng khi bay
-            tile.SetSortingOrder(100);
-
-            // 2. Di chuyển đến vị trí đích
-            await LMotion.Create(tile.transform.position,
-                    new Vector3(targetPos.x, targetPos.y, tile.transform.position.z), duration)
-                .WithEase(moveEase)
-                .BindToPosition(tile.transform)
-                .ToUniTask(); // Đợi bay xong
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: tile.GetCancellationTokenOnDestroy());
 
             // 3. Hiệu ứng lắc lư (Wobble) - Xoay qua trái, phải rồi về vị trí cũ
             // Lắc qua một bên
@@ -85,7 +78,8 @@ namespace TileMatch3.Core.BoardSystem.Animations
         [Tooltip("Danh sách các Effect phát ra khi bắt đầu bay")] [SerializeReference]
         public List<IEffectCommand> onStartEffects = new List<IEffectCommand>();
 
-        public async UniTask PlayMoveAnimation(TileRuntime tile, Vector2 targetPos, float duration, bool isPlayEffect)
+        public async UniTask PlayMoveAnimation(TileRuntime tile, Vector2 targetPos, float duration, float delay,
+            bool isPlayEffect)
         {
             // 0. Thực thi Effect ngay khi bắt đầu
             if (isPlayEffect && onStartEffects != null)
@@ -96,17 +90,10 @@ namespace TileMatch3.Core.BoardSystem.Animations
                 }
             }
 
-            tile.SetSortingOrder(100);
-
-            // Bay đến đích
-            await LMotion.Create(tile.transform.position,
-                    new Vector3(targetPos.x, targetPos.y, tile.transform.position.z), duration)
-                .WithEase(moveEase)
-                .BindToPosition(tile.transform)
-                .ToUniTask();
+            await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: tile.GetCancellationTokenOnDestroy());
 
             // Hiệu ứng nảy lên (Bounce Y)
-            float startY = tile.transform.position.y;
+            float startY = targetPos.y;
 
             // Nảy lên
             await LMotion.Create(startY, startY + bounceHeight, bounceDuration / 2f)

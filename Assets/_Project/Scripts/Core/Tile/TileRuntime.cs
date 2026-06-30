@@ -27,11 +27,10 @@ namespace TileMatch3.Core.Tile
         public Guid TileId => CurrentTileData.id;
         public Color MainColor => CurrentTileData.mainColor;
 
+        public bool IsActive => CurrentState == TileState.Normal && gameObject.activeSelf;
+
         public event Action<TileRuntime> OnTileClicked;
         public event Action<TileRuntime> OnTileNotAllowClicked;
-
-        // Reference tới Pool để có thể tự release chính mình
-        public IObjectPool<TileRuntime> Pool { get; set; }
 
         public void ResetTile()
         {
@@ -45,8 +44,7 @@ namespace TileMatch3.Core.Tile
             CurrentTileData = tileData; // Lưu lại để Shuffle
             iconIdRenderer.sprite = tileData.tileSprite;
 
-            // Xử lý Render Order: Nền = layer * 2, Icon = layer * 2 + 1 để không bị đè xuyên
-            SetSortingOrder(layer * 2);
+            SetSortingOrder(layer);
         }
 
         public void SetState(TileState state)
@@ -59,8 +57,10 @@ namespace TileMatch3.Core.Tile
 
         public void SetSortingOrder(int order)
         {
-            baseTileRenderer.sortingOrder = order + 1;
-            iconIdRenderer.sortingOrder = order + 2;
+            // Xử lý Render Order: Nền = order * 2, Icon = order * 2 + 1 để không bị đè xuyên
+            var layer = order * 2;
+            baseTileRenderer.sortingOrder = layer + 1;
+            iconIdRenderer.sortingOrder = layer + 2;
         }
 
         public void OnPointerDown(PointerEventData eventData)

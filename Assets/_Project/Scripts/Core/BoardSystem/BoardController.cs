@@ -28,15 +28,21 @@ namespace TileMatch3.Core.BoardSystem
 
         private ObjectPool<TileRuntime> tilePool;
 
+        [Header("Event Hooks")] [SerializeField]
+        private ScriptableEventTile eventTileRemoveToPool;
+
+        [SerializeField] private ScriptableEventTile eventTileGet;
+
+        [SerializeField] private ScriptableEventTile eventTileRelease;
+
         [Header("View")] [SerializeField, ReadOnly]
         private LevelData currentLevelData;
 
-        public event Action OnPreBoardGenerating;
-        
+        public event Action<TileRuntime> onTileClick;
+
         // Thêm event báo hiệu Board đã tạo xong (truyền List Tile qua để diễn)
         public event Action<List<TileRuntime>> OnBoardGenerated;
-        
-        public event Action OnBoardShuffling;
+
         // Event truyền List Tile và 1 Action logic (chứa lệnh tráo data) sang cho Visual Controller
         public event Func<List<TileRuntime>, Action, UniTask> OnBoardShufflingAnim;
 
@@ -46,14 +52,37 @@ namespace TileMatch3.Core.BoardSystem
                 createFunc: () => Instantiate(tilePrefab, boardRoot),
                 actionOnGet: (tile) =>
                 {
+                    eventTileGet?.Raise(tile);
                     tile.gameObject.SetActive(true);
                     tile.ResetTile();
                 },
-                actionOnRelease: (tile) => tile.gameObject.SetActive(false),
+                actionOnRelease: (tile) =>
+                {
+                    eventTileRelease?.Raise(tile);
+                    tile.gameObject.SetActive(false);
+                },
                 actionOnDestroy: (tile) => Destroy(tile.gameObject),
                 defaultCapacity: 100,
                 maxSize: 300
             );
+
+            if (eventTileRemoveToPool != null)
+            {
+                eventTileRemoveToPool.OnRaised += RemoveTileFromPool;
+            }
+        }
+
+        private void RemoveTileFromPool(TileRuntime tile)
+        {
+            tilePool?.Release(tile);
+        }
+
+        private void OnDestroy()
+        {
+            if (eventTileRemoveToPool != null)
+            {
+                eventTileRemoveToPool.OnRaised -= RemoveTileFromPool;
+            }
         }
 
         public void GenerateBoard(LevelData levelData, LevelGeneratorConfig config)
@@ -61,7 +90,7 @@ namespace TileMatch3.Core.BoardSystem
             currentLevelData = levelData;
             currentConfig = config;
 
-            OnPreBoardGenerating?.Invoke();
+            // OnPreBoardGenerating?.Invoke();
 
             ClearBoard();
 
@@ -105,7 +134,7 @@ namespace TileMatch3.Core.BoardSystem
                         if (shape.GetCell(x, y))
                         {
                             if (positions.Count >= tilesNeeded)
-                                return positions; 
+                                return positions;
 
                             float posX = startX + (x * currentConfig.defaultTileSize.x) + randomOffsetX;
                             float posY = startY - (y * currentConfig.defaultTileSize.y) + randomOffsetY;
@@ -140,10 +169,8 @@ namespace TileMatch3.Core.BoardSystem
 
                 int layer = Mathf.Abs(Mathf.RoundToInt(pos.z));
                 newTile.name = $"Tile_L{layer}_{i}";
-                newTile.Pool = tilePool;
-                newTile.OnTileClicked += HandleTileClicked;
 
-                activeTilesOnBoard.Add(newTile);
+                SetTileToBoard(newTile); // Sử dụng hàm SetTileToBoard để gắn sự kiện và thêm vào danh sách quản lý
             }
         }
 
@@ -197,10 +224,10 @@ namespace TileMatch3.Core.BoardSystem
         [Button]
         public async void ShuffleBoard()
         {
-            OnBoardShuffling?.Invoke(); // Vẫn giữ cho các UI khác lắng nghe
+            // OnBoardShuffling?.Invoke(); // Vẫn giữ cho các UI khác lắng nghe
 
             // Gói toàn bộ logic tráo data + refresh trạng thái vào 1 Action
-            Action shuffleLogic = () => 
+            Action shuffleLogic = () =>
             {
                 PerformShuffleLogic();
                 RefreshBoardState();
@@ -225,6 +252,8 @@ namespace TileMatch3.Core.BoardSystem
             clickedTile.OnTileClicked -= HandleTileClicked;
             activeTilesOnBoard.Remove(clickedTile);
 
+            onTileClick?.Invoke(clickedTile);
+
             rackController.Push(clickedTile);
             RefreshBoardState();
 
@@ -233,6 +262,16 @@ namespace TileMatch3.Core.BoardSystem
                 Debug.Log("Board Clear! You Win!");
                 dataVariable?.Value.onGameWin?.Invoke();
             }
+        }
+
+        public void SetTileToBoard(TileRuntime tile, bool isRefreshBoard = false)
+        {
+            tile.isOnRack = false;
+            tile.OnTileClicked += HandleTileClicked;
+            activeTilesOnBoard.Add(tile);
+
+            if (isRefreshBoard)
+                RefreshBoardState();
         }
 
         private void RefreshBoardState()

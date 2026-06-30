@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 2140747941231006416}
   - component: {fileID: 2561110868871473158}
   - component: {fileID: 4010255852362332229}
+  - component: {fileID: -6154708552393421057}
   m_Layer: 7
   m_Name: Tile
   m_TagString: Untagged
@@ -303,3 +304,19 @@ MonoBehaviour:
       data:
         sfxClip: {fileID: 8300000, guid: 7f24fc74a56b65046b156a91e08aa219, type: 3}
         volume: 1
+--- !u!114 &-6154708552393421057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5644969869537107930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81e5fce72243423aa48b36fe1ba5f806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileRuntime: {fileID: 2561110868871473158}
+  wobbleAngle: 30
+  duration: 0.8
+  ease: 23

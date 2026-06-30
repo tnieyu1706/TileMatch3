@@ -16,7 +16,7 @@ namespace TileMatch3.Core.Global
         public int level;
     }
 
-    [CreateAssetMenu(menuName = "TileMatch3/Global/GlobalGameplayDataVariable")]
+    [CreateAssetMenu(fileName = "GlobalGameplayDataVariable",menuName = "TileMatch3/Global/GlobalGameplayDataVariable")]
     public class GlobalGameplayDataVariable : ScriptableVariable<GlobalGameplayData>
     {
         public override void Save()

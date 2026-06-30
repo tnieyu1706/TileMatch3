@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Flexalon;
 using JetBrains.Annotations;
 using Reflex.Attributes;
+using TileMatch3.Core.BoardSystem.Animations;
 using TileMatch3.Core.Global;
 using TileMatch3.Core.Tile;
 using UnityEngine;
@@ -13,9 +14,13 @@ namespace TileMatch3.Core.BoardSystem
     public class RackController : MonoBehaviour
     {
         [Inject] private GlobalGameplayDataVariable dataVariable;
+        [SerializeField] private ScriptableEventTile eventTileRemoveToPool;
         [SerializeField] private FlexalonObject slotsFlexalon;
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private Vector2 offset = new(0, 0.1f);
+
+        [SerializeField] private TileMoveAnimatorSO moveAnimator;
+        [SerializeField] private float moveDuration = 0.2f;
 
         private int slotNumber = 7;
 
@@ -27,19 +32,38 @@ namespace TileMatch3.Core.BoardSystem
         // Cache lưu trữ các tile ĐANG TRONG QUÁ TRÌNH MERGE
         private readonly List<TileRuntime> mergingTiles = new List<TileRuntime>();
 
-        public event Action<TileRuntime, Vector2, bool> onTileMoving;
+        public event Action<TileRuntime, Vector2, float, bool> onTileMoving;
         public event Func<TileRuntime[], UniTask> onTileMerged;
+
+        public event Action<TileRuntime[]> onTileMergedData;
 
         public Transform SlotRootTransform => slotsFlexalon.transform;
 
-        private void Awake()
+        private void Start()
         {
-            // TODO: register related handler when board onWin, onLose
+            onTileMoving += MoveTileToTarget;
+        }
+
+        private void MoveTileToTarget(TileRuntime tile, Vector2 targetPos, float delay, bool isPlayEffects)
+        {
+            moveAnimator.MoveTile(tile, targetPos, moveDuration).Forget();
         }
 
         private void OnDestroy()
         {
-            // TODO: un-register related handler when board onWin, onLose
+            onTileMoving -= MoveTileToTarget;
+        }
+
+        public List<TileRuntime> GetActiveRackTiles()
+        {
+            List<TileRuntime> result = new();
+            foreach (var tile in rackTiles)
+            {
+                if (mergingTiles.Contains(tile)) continue; // Bỏ qua các tile đang merge
+                result.Add(tile);
+            }
+
+            return result;
         }
 
         // Tính toán vị trí ảo cho các index vượt quá slotNumber
@@ -123,6 +147,9 @@ namespace TileMatch3.Core.BoardSystem
                 // Đưa vào cache ngay lập tức để không bị tính là slot đang chiếm dụng
                 mergingTiles.Add(mergeRange[i]);
             }
+            
+            // [MỚI]: Báo cho Logic biết ngay lập tức (Để UndoRecord xóa đi)
+            onTileMergedData?.Invoke(mergeRange);
 
             // Bắn event và CHỜ đợi UI Animation Merge chạy xong
             if (onTileMerged != null)
@@ -137,8 +164,8 @@ namespace TileMatch3.Core.BoardSystem
                 tile.transform.localScale = Vector3.one;
                 tile.transform.localRotation = Quaternion.identity;
 
-                if (tile.Pool != null)
-                    tile.Pool.Release(tile);
+                if (eventTileRemoveToPool != null)
+                    eventTileRemoveToPool.Raise(tile);
                 else
                     Destroy(tile.gameObject);
             }
@@ -153,7 +180,7 @@ namespace TileMatch3.Core.BoardSystem
             // Cập nhật lại vị trí cho tất cả các Tile còn lại trên Rack (Tạo hiệu ứng Collapse)
             for (int i = 0; i < rackTiles.Count; i++)
             {
-                onTileMoving?.Invoke(rackTiles[i], GetPositionForIndex(i), false);
+                onTileMoving?.Invoke(rackTiles[i], GetPositionForIndex(i), 0, false);
             }
 
             // Kiểm tra lại xem sau khi merge và collapse xong, rack có bị đầy không
@@ -183,7 +210,7 @@ namespace TileMatch3.Core.BoardSystem
             return logicalCount >= slotNumber;
         }
 
-        public void Push(TileRuntime tileRuntime)
+        public async void Push(TileRuntime tileRuntime)
         {
             tileRuntime.isOnRack = true;
 
@@ -193,12 +220,12 @@ namespace TileMatch3.Core.BoardSystem
             rackTiles.Insert(index, tileRuntime);
 
             // Cập nhật vị trí UI cho tile mới và các tile bị đẩy sang phải
-            onTileMoving?.Invoke(rackTiles[index], GetPositionForIndex(index), true);
+            onTileMoving?.Invoke(rackTiles[index], GetPositionForIndex(index), moveDuration, true);
             for (int i = index + 1; i < rackTiles.Count; i++)
             {
-                onTileMoving?.Invoke(rackTiles[i], GetPositionForIndex(i), false);
+                onTileMoving?.Invoke(rackTiles[i], GetPositionForIndex(i), 0, false);
             }
-
+            
             CheckAndMerge();
         }
 
@@ -224,9 +251,9 @@ namespace TileMatch3.Core.BoardSystem
             // Dịch các tile bên phải sang trái
             for (int i = index; i < rackTiles.Count; i++)
             {
-                onTileMoving?.Invoke(rackTiles[i], GetPositionForIndex(i), false);
+                onTileMoving?.Invoke(rackTiles[i], GetPositionForIndex(i), 0, false);
             }
-
+            
             return poppedTile;
         }
 
@@ -273,8 +300,8 @@ namespace TileMatch3.Core.BoardSystem
         {
             foreach (var tile in rackTiles)
             {
-                if (tile.Pool != null)
-                    tile.Pool.Release(tile);
+                if (eventTileRemoveToPool != null)
+                    eventTileRemoveToPool.Raise(tile);
                 else
                     Destroy(tile.gameObject);
             }
