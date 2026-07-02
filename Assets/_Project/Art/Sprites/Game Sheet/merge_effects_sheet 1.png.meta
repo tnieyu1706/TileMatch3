@@ -1,0 +1,735 @@
+fileFormatVersion: 2
+guid: fb34a551598cb0b4485b531780f8ef94
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4954903866602205626
+    second: merge_effects_sheet 1_0
+  - first:
+      213: 5024860386521907282
+    second: merge_effects_sheet 1_1
+  - first:
+      213: -7419581549052527406
+    second: merge_effects_sheet 1_2
+  - first:
+      213: -6036089490060130846
+    second: merge_effects_sheet 1_3
+  - first:
+      213: 1496512634942207018
+    second: merge_effects_sheet 1_4
+  - first:
+      213: -1590148209159697519
+    second: merge_effects_sheet 1_5
+  - first:
+      213: -5906908637377932440
+    second: merge_effects_sheet 1_6
+  - first:
+      213: -2187506035060455214
+    second: merge_effects_sheet 1_7
+  - first:
+      213: -3302167358259977811
+    second: merge_effects_sheet 1_8
+  - first:
+      213: -593542886032053150
+    second: merge_effects_sheet 1_9
+  - first:
+      213: -1000309465363699875
+    second: merge_effects_sheet 1_10
+  - first:
+      213: -3782848205465582536
+    second: merge_effects_sheet 1_11
+  - first:
+      213: 197768887799488368
+    second: merge_effects_sheet 1_12
+  - first:
+      213: -7800673147130144773
+    second: merge_effects_sheet 1_13
+  - first:
+      213: 7745414281983353019
+    second: merge_effects_sheet 1_14
+  - first:
+      213: -7484746071059237645
+    second: merge_effects_sheet 1_15
+  - first:
+      213: 1889279552200791188
+    second: merge_effects_sheet 1_16
+  - first:
+      213: 5774381253873195963
+    second: merge_effects_sheet 1_17
+  - first:
+      213: -3731795020342794228
+    second: merge_effects_sheet 1_18
+  - first:
+      213: 19161245161784604
+    second: merge_effects_sheet 1_19
+  - first:
+      213: -3347269603127229683
+    second: merge_effects_sheet 1_20
+  - first:
+      213: -2161672203405277286
+    second: merge_effects_sheet 1_21
+  - first:
+      213: 7803590868012707905
+    second: merge_effects_sheet 1_22
+  - first:
+      213: -6112167536943019032
+    second: merge_effects_sheet 1_23
+  - first:
+      213: -6957055978477066839
+    second: merge_effects_sheet 1_24
+  - first:
+      213: 2894191327618091059
+    second: merge_effects_sheet 1_25
+  - first:
+      213: 6305396359069551976
+    second: merge_effects_sheet 1_26
+  - first:
+      213: -8542527162083319716
+    second: merge_effects_sheet 1_27
+  - first:
+      213: 8293901653729919329
+    second: merge_effects_sheet 1_28
+  - first:
+      213: -7315394499584726139
+    second: merge_effects_sheet 1_29
+  - first:
+      213: 7509972747093221547
+    second: merge_effects_sheet 1_30
+  - first:
+      213: -6557273908278879841
+    second: merge_effects_sheet 1_31
+  - first:
+      213: 5637100255892089117
+    second: merge_effects_sheet 1_32
+  - first:
+      213: 2758573071951837652
+    second: merge_effects_sheet 1_33
+  - first:
+      213: -721076985774433479
+    second: merge_effects_sheet 1_34
+  - first:
+      213: -5786634195689276624
+    second: merge_effects_sheet 1_35
+  - first:
+      213: -1920677779224062456
+    second: merge_effects_sheet 1_36
+  - first:
+      213: -3939562953794571728
+    second: merge_effects_sheet 1_37
+  - first:
+      213: 4936315661061534857
+    second: merge_effects_sheet 1_38
+  - first:
+      213: -7801356219390907878
+    second: merge_effects_sheet 1_39
+  - first:
+      213: -9094030705164477581
+    second: merge_effects_sheet 1_40
+  - first:
+      213: 6446320778773948241
+    second: merge_effects_sheet 1_41
+  - first:
+      213: 7800183365626611195
+    second: merge_effects_sheet 1_42
+  - first:
+      213: -4869170472588184954
+    second: merge_effects_sheet 1_43
+  - first:
+      213: 707525367366596902
+    second: merge_effects_sheet 1_44
+  - first:
+      213: -5933049669925300378
+    second: merge_effects_sheet 1_45
+  - first:
+      213: -4362741843539638
+    second: merge_effects_sheet 1_46
+  - first:
+      213: 8540155542327384162
+    second: merge_effects_sheet 1_47
+  - first:
+      213: 8223771881909006451
+    second: merge_effects_sheet 1_48
+  - first:
+      213: -7598381135806344080
+    second: merge_effects_sheet 1_49
+  - first:
+      213: 7225523846356229061
+    second: merge_effects_sheet 1_50
+  - first:
+      213: -4382196892800045945
+    second: merge_effects_sheet 1_51
+  - first:
+      213: 6776602308666181368
+    second: merge_effects_sheet 1_52
+  - first:
+      213: 6693420449123316122
+    second: merge_effects_sheet 1_53
+  - first:
+      213: -3401091827697595911
+    second: merge_effects_sheet 1_54
+  - first:
+      213: 3108572272355310038
+    second: merge_effects_sheet 1_55
+  - first:
+      213: -2730410543567409309
+    second: merge_effects_sheet 1_56
+  - first:
+      213: 8038181841766538593
+    second: merge_effects_sheet 1_57
+  - first:
+      213: 3267325822858626812
+    second: merge_effects_sheet 1_58
+  - first:
+      213: 894901236080941224
+    second: merge_effects_sheet 1_59
+  - first:
+      213: -52757990732538021
+    second: merge_effects_sheet 1_60
+  - first:
+      213: 5127735038930525091
+    second: merge_effects_sheet 1_61
+  - first:
+      213: 3431274125910140928
+    second: merge_effects_sheet 1_62
+  - first:
+      213: -2404952011248612481
+    second: merge_effects_sheet 1_63
+  - first:
+      213: -449736002201973155
+    second: merge_effects_sheet 1_64
+  - first:
+      213: -5586674015041461181
+    second: merge_effects_sheet 1_65
+  - first:
+      213: -6120643289900496009
+    second: merge_effects_sheet 1_66
+  - first:
+      213: -2677091842856378683
+    second: merge_effects_sheet 1_67
+  - first:
+      213: -3051312288034017859
+    second: merge_effects_sheet 1_68
+  - first:
+      213: 6227445659157495431
+    second: merge_effects_sheet 1_69
+  - first:
+      213: 6820182099141611164
+    second: merge_effects_sheet 1_70
+  - first:
+      213: -9082871671966272066
+    second: merge_effects_sheet 1_71
+  - first:
+      213: -8770069555488053333
+    second: merge_effects_sheet 1_72
+  - first:
+      213: 3125015155331667158
+    second: merge_effects_sheet 1_73
+  - first:
+      213: 3349373881539815495
+    second: merge_effects_sheet 1_74
+  - first:
+      213: -3905410634070735194
+    second: merge_effects_sheet 1_75
+  - first:
+      213: 3702084123405449543
+    second: merge_effects_sheet 1_76
+  - first:
+      213: 704486315925416777
+    second: merge_effects_sheet 1_77
+  - first:
+      213: 4084350524037169459
+    second: merge_effects_sheet 1_78
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 342
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab1b80180da53c440800000000000000
+      internalID: 4954903866602205626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_1
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 342
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 250029016e3ebb540800000000000000
+      internalID: 5024860386521907282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_2
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 342
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dc7eaa44e9580990800000000000000
+      internalID: -7419581549052527406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_3
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 342
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e54f70e6908b3ca0800000000000000
+      internalID: -6036089490060130846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_4
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 342
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a243d97005ea4c410800000000000000
+      internalID: 1496512634942207018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_5
+      rect:
+        serializedVersion: 2
+        x: 850
+        y: 342
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19b00d4f0a8aee9e0800000000000000
+      internalID: -1590148209159697519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 172
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 863d664f3e1760ea0800000000000000
+      internalID: -5906908637377932440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_7
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 172
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d8c23cd9da64a1e0800000000000000
+      internalID: -2187506035060455214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_8
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 172
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da1260688485c22d0800000000000000
+      internalID: -3302167358259977811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_9
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 172
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26c691fc3ef43c7f0800000000000000
+      internalID: -593542886032053150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_10
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 172
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d57298357df2e12f0800000000000000
+      internalID: -1000309465363699875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 834000a799f908bc0800000000000000
+      internalID: -3782848205465582536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_12
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 2
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07f99e071cd9eb200800000000000000
+      internalID: 197768887799488368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_13
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 2
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf711683a117eb390800000000000000
+      internalID: -7800673147130144773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_14
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 2
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb0ead3a04d3d7b60800000000000000
+      internalID: 7745414281983353019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: merge_effects_sheet 1_15
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 2
+        width: 170
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f47380ba17d02890800000000000000
+      internalID: -7484746071059237645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d07e35a77d7861640894557995db556e
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      merge_effects_sheet 1_0: 4954903866602205626
+      merge_effects_sheet 1_1: 5024860386521907282
+      merge_effects_sheet 1_10: -1000309465363699875
+      merge_effects_sheet 1_11: -3782848205465582536
+      merge_effects_sheet 1_12: 197768887799488368
+      merge_effects_sheet 1_13: -7800673147130144773
+      merge_effects_sheet 1_14: 7745414281983353019
+      merge_effects_sheet 1_15: -7484746071059237645
+      merge_effects_sheet 1_2: -7419581549052527406
+      merge_effects_sheet 1_3: -6036089490060130846
+      merge_effects_sheet 1_4: 1496512634942207018
+      merge_effects_sheet 1_5: -1590148209159697519
+      merge_effects_sheet 1_6: -5906908637377932440
+      merge_effects_sheet 1_7: -2187506035060455214
+      merge_effects_sheet 1_8: -3302167358259977811
+      merge_effects_sheet 1_9: -593542886032053150
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -190,6 +190,8 @@ namespace Obvious.Soap
 #endif
             if (_resetOn == ResetType.OnSingleSceneLoad)
                 SceneManager.sceneLoaded += OnSceneLoaded;
+            
+            Application.quitting += OnApplicationQuit;
         }
 
         protected virtual void OnDisable()
@@ -198,6 +200,14 @@ namespace Obvious.Soap
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
 #endif
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            
+            Application.quitting -= OnApplicationQuit;
+        }
+        
+        private void OnApplicationQuit()
+        {
+            if (_saved)
+                Save();
         }
 
         protected virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -221,6 +231,13 @@ namespace Obvious.Soap
             if (playModeStateChange == PlayModeStateChange.ExitingEditMode)
             {
                 Init();
+            }
+            else if (playModeStateChange == PlayModeStateChange.ExitingPlayMode)
+            {
+                if (_saved)
+                {
+                    Save();
+                }
             }
             else if (playModeStateChange == PlayModeStateChange.EnteredEditMode)
             {

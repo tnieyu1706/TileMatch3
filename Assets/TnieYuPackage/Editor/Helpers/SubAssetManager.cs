@@ -6,9 +6,9 @@ using UnityEngine;
 namespace TnieYuPackage.Helpers
 {
     /// <summary>
-    /// Provides drag-and-drop functionality within the Unity Project window 
-    /// to manage sub-assets. Includes options to automatically remap missing references 
-    /// when packing or unpacking assets.
+    /// Cung cấp tính năng kéo thả trong cửa sổ Project của Unity để quản lý sub-asset.
+    /// Bao gồm các tùy chọn tự động quét và sửa lại reference (tham chiếu) bị thiếu
+    /// khi đóng gói (pack) hoặc giải nén (unpack) asset.
     /// </summary>
     [InitializeOnLoad]
     public static class SubAssetManager
@@ -51,12 +51,13 @@ namespace TnieYuPackage.Helpers
                 if (canPackIn)
                 {
                     string msg =
-                        $"Do you want to pack {draggedObjects.Length} asset(s) into '{targetMainAsset.name}'?\n\n" +
-                        "You can choose to automatically scan the project and fix missing references.";
+                        $"Bạn có muốn đóng gói {draggedObjects.Length} asset vào '{targetMainAsset.name}' không?\n\n" +
+                        "Bạn có thể chọn tự động quét toàn bộ project để sửa lại các tham chiếu bị thiếu.";
 
-                    // DisplayDialogComplex returns: 0 = ok (btn 1), 1 = cancel (btn 2), 2 = alt (btn 3)
-                    int choice = EditorUtility.DisplayDialogComplex("Pack Asset(s)", msg, "Pack (Fix Refs)", "Cancel",
-                        "Pack (No Refs)");
+                    // DisplayDialogComplex trả về: 0 = ok (btn 1), 1 = cancel (btn 2), 2 = alt (btn 3)
+                    int choice = EditorUtility.DisplayDialogComplex("Đóng gói Asset", msg, "Đóng gói (Sửa Tham Chiếu)",
+                        "Hủy",
+                        "Đóng gói (Bỏ qua Tham Chiếu)");
 
                     if (choice == 0) PackAssets(draggedObjects, targetMainAsset, true);
                     else if (choice == 2) PackAssets(draggedObjects, targetMainAsset, false);
@@ -64,11 +65,11 @@ namespace TnieYuPackage.Helpers
                 else if (canPackOut)
                 {
                     string msg =
-                        $"Do you want to unpack {draggedObjects.Length} sub-asset(s) into the folder '{Path.GetFileName(targetPath)}'?\n\n" +
-                        "You can choose to automatically scan the project and fix missing references.";
+                        $"Bạn có muốn giải nén {draggedObjects.Length} sub-asset vào thư mục '{Path.GetFileName(targetPath)}' không?\n\n" +
+                        "Bạn có thể chọn tự động quét toàn bộ project để sửa lại các tham chiếu bị thiếu.";
 
-                    int choice = EditorUtility.DisplayDialogComplex("Unpack Asset(s)", msg, "Unpack (Fix Refs)",
-                        "Cancel", "Unpack (No Refs)");
+                    int choice = EditorUtility.DisplayDialogComplex("Giải nén Asset", msg, "Giải nén (Sửa Tham Chiếu)",
+                        "Hủy", "Giải nén (Bỏ qua Tham Chiếu)");
 
                     if (choice == 0) UnpackAssets(draggedObjects, targetPath, true);
                     else if (choice == 2) UnpackAssets(draggedObjects, targetPath, false);
@@ -84,11 +85,16 @@ namespace TnieYuPackage.Helpers
         {
             foreach (var obj in draggedObjects)
             {
-                if (obj is GameObject || obj is SceneAsset ||
-                    AssetDatabase.IsValidFolder(AssetDatabase.GetAssetPath(obj)))
+                // KIỂM TRA QUAN TRỌNG: Phải là một file vật lý trong Project, KHÔNG phải GameObject từ Hierarchy
+                if (!EditorUtility.IsPersistent(obj)) return false;
+
+                string path = AssetDatabase.GetAssetPath(obj);
+                if (string.IsNullOrEmpty(path)) return false;
+
+                if (obj is GameObject || obj is SceneAsset || AssetDatabase.IsValidFolder(path))
                     return false;
 
-                if (AssetDatabase.GetAssetPath(obj) == AssetDatabase.GetAssetPath(targetAsset))
+                if (path == AssetDatabase.GetAssetPath(targetAsset))
                     return false;
             }
 
@@ -99,7 +105,14 @@ namespace TnieYuPackage.Helpers
         {
             foreach (var obj in draggedObjects)
             {
-                if (AssetDatabase.IsMainAsset(obj) || AssetDatabase.IsValidFolder(AssetDatabase.GetAssetPath(obj)))
+                // KIỂM TRA QUAN TRỌNG: Phải là một file vật lý trong Project, KHÔNG phải GameObject từ Hierarchy
+                if (!EditorUtility.IsPersistent(obj)) return false;
+
+                string path = AssetDatabase.GetAssetPath(obj);
+                if (string.IsNullOrEmpty(path)) return false;
+
+                // Không thể giải nén một Main Asset hoặc một thư mục
+                if (AssetDatabase.IsMainAsset(obj) || AssetDatabase.IsValidFolder(path))
                     return false;
             }
 
@@ -111,8 +124,8 @@ namespace TnieYuPackage.Helpers
         #region Drag & Drop Processing (Pack / Unpack)
 
         /// <summary>
-        /// Adds the source assets as sub-assets inside the target main asset.
-        /// Can optionally replace missing references across the project.
+        /// Thêm các asset nguồn vào làm sub-asset bên trong main asset mục tiêu.
+        /// Có tùy chọn quét và thay thế các tham chiếu bị thiếu trên toàn project.
         /// </summary>
         private static void PackAssets(Object[] sources, Object targetMain, bool fixReferences)
         {
@@ -128,7 +141,7 @@ namespace TnieYuPackage.Helpers
                 clone.name = source.name;
 
                 AssetDatabase.AddObjectToAsset(clone, targetMain);
-                referenceMap.Add(source, clone); // Record the mapping for reference fixing
+                referenceMap.Add(source, clone); // Lưu lại map để sửa tham chiếu
 
                 if (AssetDatabase.IsMainAsset(source))
                 {
@@ -140,7 +153,7 @@ namespace TnieYuPackage.Helpers
                 }
             }
 
-            // Save assets so the clones are fully registered before we remap
+            // Lưu asset để clone được đăng ký đầy đủ trước khi sửa tham chiếu
             AssetDatabase.SaveAssets();
 
             if (fixReferences)
@@ -148,7 +161,7 @@ namespace TnieYuPackage.Helpers
                 ReplaceReferencesInProject(referenceMap);
             }
 
-            // Now safely delete the old assets
+            // Xóa file cũ một cách an toàn
             foreach (var path in mainAssetsToDelete)
             {
                 AssetDatabase.DeleteAsset(path);
@@ -160,12 +173,12 @@ namespace TnieYuPackage.Helpers
             }
 
             SaveAndRefresh(targetMain);
-            Debug.Log($"[SubAssetManager] Successfully packed {sources.Length} asset(s)!");
+            Debug.Log($"[SubAssetManager] Đã đóng gói thành công {sources.Length} asset!");
         }
 
         /// <summary>
-        /// Extracts sub-assets into a specified folder using cloning.
-        /// Can optionally replace missing references across the project.
+        /// Giải nén sub-asset ra một thư mục cụ thể dưới dạng file độc lập.
+        /// Có tùy chọn quét và thay thế các tham chiếu bị thiếu trên toàn project.
         /// </summary>
         private static void UnpackAssets(Object[] subAssets, string targetFolderPath, bool fixReferences)
         {
@@ -183,8 +196,8 @@ namespace TnieYuPackage.Helpers
 
                 AssetDatabase.CreateAsset(clone, newPath);
 
-                referenceMap.Add(subAsset, clone); // Record mapping
-                subAssetsToDestroy.Add(subAsset); // Delay destruction until after reference fix
+                referenceMap.Add(subAsset, clone); // Lưu lại map
+                subAssetsToDestroy.Add(subAsset); // Trì hoãn việc xóa cho đến khi sửa xong tham chiếu
             }
 
             AssetDatabase.SaveAssets();
@@ -194,7 +207,7 @@ namespace TnieYuPackage.Helpers
                 ReplaceReferencesInProject(referenceMap);
             }
 
-            // Clean up original sub-assets
+            // Dọn dẹp các sub-asset gốc
             foreach (var obj in subAssetsToDestroy)
             {
                 AssetDatabase.RemoveObjectFromAsset(obj);
@@ -203,7 +216,7 @@ namespace TnieYuPackage.Helpers
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"[SubAssetManager] Successfully unpacked {subAssets.Length} asset(s) into {targetFolderPath}");
+            Debug.Log($"[SubAssetManager] Đã giải nén thành công {subAssets.Length} asset vào {targetFolderPath}");
         }
 
         #endregion
@@ -211,7 +224,7 @@ namespace TnieYuPackage.Helpers
         #region Reference Fixing Logic
 
         /// <summary>
-        /// Scans the project and replaces any serialized property pointing to an old asset with the new asset.
+        /// Quét project và thay thế bất kỳ thuộc tính nào đang trỏ tới asset cũ bằng asset mới.
         /// </summary>
         private static void ReplaceReferencesInProject(Dictionary<Object, Object> referenceMap)
         {
@@ -224,22 +237,23 @@ namespace TnieYuPackage.Helpers
             {
                 string path = allPaths[i];
 
-                // Update Progress Bar
+                // Cập nhật thanh tiến trình
                 if (i % 50 == 0)
                 {
-                    if (EditorUtility.DisplayCancelableProgressBar("Updating References", $"Scanning project: {path}",
+                    if (EditorUtility.DisplayCancelableProgressBar("Đang cập nhật tham chiếu",
+                            $"Đang quét project: {path}",
                             i / total))
                         break;
                 }
 
-                // Filter out non-project files and files that cannot hold Unity references to speed up
+                // Lọc bỏ các file không thuộc project và các file không thể chứa reference của Unity để tăng tốc
                 if (!path.StartsWith("Assets/")) continue;
                 string ext = Path.GetExtension(path).ToLower();
                 if (ext == ".cs" || ext == ".png" || ext == ".jpg" || ext == ".wav" ||
                     ext == ".mp3" || ext == ".fbx" || ext == ".obj" || ext == ".unity" || ext == ".txt" ||
                     ext == ".json")
                 {
-                    // Note: .unity (Scenes) are skipped because LoadAllAssetsAtPath doesn't work well on unopened scenes.
+                    // Lưu ý: file .unity (Scene) bị bỏ qua vì LoadAllAssetsAtPath hoạt động không ổn định trên scene đang đóng.
                     continue;
                 }
 
@@ -254,7 +268,7 @@ namespace TnieYuPackage.Helpers
                     SerializedProperty prop = so.GetIterator();
                     bool enterChildren = true;
 
-                    // Iterate through every single property inside the asset
+                    // Lặp qua từng thuộc tính bên trong asset
                     while (prop.Next(enterChildren))
                     {
                         enterChildren = true;
@@ -263,7 +277,7 @@ namespace TnieYuPackage.Helpers
                             Object refObj = prop.objectReferenceValue;
                             if (refObj != null && referenceMap.TryGetValue(refObj, out Object newObj))
                             {
-                                // Overwrite the old missing reference with the new clone
+                                // Ghi đè tham chiếu cũ bằng clone mới
                                 prop.objectReferenceValue = newObj;
                                 modified = true;
                             }
@@ -310,20 +324,21 @@ namespace TnieYuPackage.Helpers
 
             if (subAssetsToUnpack.Count == 0)
             {
-                Debug.Log("[SubAssetManager] No sub-assets found to unpack.");
+                Debug.Log("[SubAssetManager] Không tìm thấy sub-asset nào để giải nén.");
                 return;
             }
 
-            string msg = $"Found {subAssetsToUnpack.Count} sub-asset(s) inside '{mainAsset.name}'.\n" +
-                         $"Do you want to unpack them into the folder '{Path.GetFileName(folderPath)}'?\n\n" +
-                         "You can choose to automatically scan the project and fix missing references.";
+            string msg = $"Tìm thấy {subAssetsToUnpack.Count} sub-asset bên trong '{mainAsset.name}'.\n" +
+                         $"Bạn có muốn giải nén chúng ra thư mục '{Path.GetFileName(folderPath)}' không?\n\n" +
+                         "Bạn có thể chọn tự động quét toàn bộ project để sửa lại các tham chiếu bị thiếu.";
 
-            int choice = EditorUtility.DisplayDialogComplex("Unpack All Sub-assets", msg, "Unpack (Fix Refs)", "Cancel",
-                "Unpack (No Refs)");
+            int choice = EditorUtility.DisplayDialogComplex("Giải nén tất cả Sub-asset", msg,
+                "Giải nén (Sửa Tham Chiếu)", "Hủy",
+                "Giải nén (Bỏ qua Tham Chiếu)");
 
-            if (choice == 1) return; // User clicked Cancel
+            if (choice == 1) return; // Người dùng bấm Hủy
 
-            // Run unpack logic with the collected list of sub-assets
+            // Chạy logic giải nén với danh sách sub-asset thu thập được
             UnpackAssets(subAssetsToUnpack.ToArray(), folderPath, choice == 0);
         }
 
@@ -334,9 +349,9 @@ namespace TnieYuPackage.Helpers
             string assetPath = AssetDatabase.GetAssetPath(mainAsset);
             Object[] allObjects = AssetDatabase.LoadAllAssetsAtPath(assetPath);
 
-            if (EditorUtility.DisplayDialog("Warning",
-                    $"Are you sure you want to DELETE ALL sub-assets inside '{mainAsset.name}'?",
-                    "Delete", "Cancel"))
+            if (EditorUtility.DisplayDialog("Cảnh báo",
+                    $"Bạn có chắc chắn muốn XÓA TOÀN BỘ sub-asset bên trong '{mainAsset.name}' không?",
+                    "Xóa", "Hủy"))
             {
                 int count = 0;
                 foreach (var obj in allObjects)
@@ -350,7 +365,7 @@ namespace TnieYuPackage.Helpers
                 if (count > 0)
                 {
                     SaveAndRefresh(mainAsset);
-                    Debug.Log($"[SubAssetManager] Deleted {count} sub-assets from {mainAsset.name}");
+                    Debug.Log($"[SubAssetManager] Đã xóa {count} sub-asset khỏi {mainAsset.name}");
                 }
             }
         }

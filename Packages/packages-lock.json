@@ -395,6 +395,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.w0lfend.unity-serialized-interface": {
+      "version": "https://github.com/W0lfEnd/Unity-Serialized-Interface.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "643eccc67ad76b931d7193ba2bae1ed795487546"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

@@ -7,7 +7,7 @@ namespace TnieYuPackage.DesignPatterns
     /// Data: the information to be sent
     /// Handler: the logic to be executed on the receiver's side
     /// </summary>
-    public interface IPayload : IVisitor<IComponent>
+    public interface IPayload : IVisitor
     {
         object Data { get; set; }
     }
@@ -17,9 +17,11 @@ namespace TnieYuPackage.DesignPatterns
         public IComponent Source { get; set; }
         public string Data { get; set; }
 
-        public void Visit(IComponent acceptable)
+        public void Visit(IVisitable acceptable)
         {
-            Debug.Log($"Payload from {Source.Name} to {acceptable.Name}: {Data}");
+            if (acceptable is not IComponent component) return;
+            
+            Debug.Log($"Payload from {Source.Name} to {component.Name}: {Data}");
             // Execute logic on component
         }
 

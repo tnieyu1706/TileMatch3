@@ -55,5 +55,6 @@ namespace TnieYuPackage.Utils
 
         public static implicit operator Guid(SerializableGuid serializableGuid) => serializableGuid.Guid;
         public static implicit operator SerializableGuid(Guid guid) => new SerializableGuid { Guid = guid };
+        public static implicit operator string(SerializableGuid serializableGuid) => serializableGuid.value;
     }
 }
