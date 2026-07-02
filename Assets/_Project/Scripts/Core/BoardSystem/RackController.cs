@@ -32,6 +32,7 @@ namespace TileMatch3.Core.BoardSystem
         // Cache lưu trữ các tile ĐANG TRONG QUÁ TRÌNH MERGE
         private readonly List<TileRuntime> mergingTiles = new List<TileRuntime>();
 
+        public event Action<TileRuntime> OnTilePushedData;
         public event Action<TileRuntime, Vector2, float, bool> onTileMoving;
         public event Func<TileRuntime[], UniTask> onTileMerged;
 
@@ -218,6 +219,7 @@ namespace TileMatch3.Core.BoardSystem
 
             // Insert đẩy các tile đằng sau lùi lại 1 index
             rackTiles.Insert(index, tileRuntime);
+            OnTilePushedData?.Invoke(tileRuntime);
 
             // Cập nhật vị trí UI cho tile mới và các tile bị đẩy sang phải
             onTileMoving?.Invoke(rackTiles[index], GetPositionForIndex(index), moveDuration, true);

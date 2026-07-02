@@ -25,6 +25,7 @@ MonoBehaviour:
     - 53bee39e6eee30143b66e44086f11175
     - a7aaa6f18bf6c4a4c995902b2bb1a5dc
     - cb9b18f260ece424096e5de7b062c9e1
+    - e1c82d4f1c72f8746b9cf624ddfa32fa
     values:
     - iconNameOrGuid: 
       colorIndex: 2
@@ -68,6 +69,10 @@ MonoBehaviour:
       isColorRecursive: 0
     - iconNameOrGuid: Settings Icon
       colorIndex: 0
+      isIconRecursive: 0
+      isColorRecursive: 0
+    - iconNameOrGuid: Font Icon
+      colorIndex: 6
       isIconRecursive: 0
       isColorRecursive: 0
   bookmarks: []

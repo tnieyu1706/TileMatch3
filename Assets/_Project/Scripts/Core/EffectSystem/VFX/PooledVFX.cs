@@ -26,14 +26,14 @@ namespace TileMatch3.Core.EffectSystem
         /// <summary>
         /// Kích hoạt VFX và tự động trả về Pool sau một khoảng thời gian
         /// </summary>
-        public async UniTaskVoid PlayAndAutoRelease(float lifeTime, Color mainColor)
+        public async UniTaskVoid PlayAndAutoRelease(float lifeTime, Color? mainColor)
         {
             if (_animator != null)
             {
                 _animator.speed = 1 / lifeTime;
             }
-            
-            _spriteRenderer.color = mainColor;
+
+            _spriteRenderer.color = mainColor ?? Color.white;
 
             // Chờ VFX chạy xong (tương đương với việc đợi để Destroy như code cũ)
             await UniTask.Delay(TimeSpan.FromSeconds(lifeTime),

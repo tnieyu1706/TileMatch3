@@ -17,7 +17,7 @@ namespace TileMatch3.Core.EffectSystem
         /// <summary>
         /// Gọi hàm này để lấy ra một VFX tại vị trí mong muốn
         /// </summary>
-        public PooledVFX SpawnVFX(GameObject prefab, Vector3 position, float lifeTime, Color color)
+        public PooledVFX SpawnVFX(GameObject prefab, Vector3 position, float lifeTime, Color? color)
         {
             if (prefab == null) return null;
 

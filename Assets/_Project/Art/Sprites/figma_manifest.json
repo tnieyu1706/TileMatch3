@@ -1,7 +1,7 @@
 {
   "figmaFileKey": "bap0gn3qVgzGKL25aa3kui",
   "localFolderPath": "Assets/_Project/Art/Sprites",
-  "lastSync": "2026-06-29T08:48:36.0315855Z",
+  "lastSync": "2026-07-02T11:16:29.143745Z",
   "assets": {
     "2:2": {
       "name": "hand_point 1",
@@ -13,12 +13,6 @@
       "name": "background 1",
       "imageRef": "992307edf1e3f8b7f8d6d6b4c507ab1d4bf187c6",
       "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\background 1.png",
-      "pageName": "Game Sheet"
-    },
-    "9:377": {
-      "name": "rack 1",
-      "imageRef": "006aeac9355bf78fc7f7f1ec4f8e522d9442fbda",
-      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\rack 1.png",
       "pageName": "Game Sheet"
     },
     "1:9": {
@@ -51,12 +45,6 @@
       "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\LevelMap_4 1.png",
       "pageName": "Game Sheet"
     },
-    "9:375": {
-      "name": "panel 1",
-      "imageRef": "58f34850414440928d05ae0787437b0848d5bb3b",
-      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\panel 1.png",
-      "pageName": "Game Sheet"
-    },
     "1:8": {
       "name": "tile-base 1",
       "imageRef": "4792f69b007c8f16da74a1d2f2110f1aa6868e86",
@@ -81,12 +69,6 @@
       "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\fruits_sheet 1.png",
       "pageName": "Game Sheet"
     },
-    "9:376": {
-      "name": "button 1",
-      "imageRef": "1f0d5b5db6239ad195afa7b12e63ff4baf9d4704",
-      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\button 1.png",
-      "pageName": "Game Sheet"
-    },
     "25:246": {
       "name": "fail 1",
       "imageRef": "88e711033be8d8e7ecbebb8dcbeecb9734e4ebb6",
@@ -95,8 +77,26 @@
     },
     "27:2": {
       "name": "merge_effects_sheet 1",
-      "imageRef": "23101d8d45a7c732bfecf0a3448576a527589f0b",
+      "imageRef": "7e4b2b787d8818cea71b7c9f305fe97afb0cde70",
       "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\merge_effects_sheet 1.png",
+      "pageName": "Game Sheet"
+    },
+    "39:2": {
+      "name": "cloud1 1",
+      "imageRef": "d2f694aa9597b69edb0f509cb4ca69ecac43f98a",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\cloud1 1.png",
+      "pageName": "Game Sheet"
+    },
+    "39:23": {
+      "name": "cloud4 1",
+      "imageRef": "8aa9213259fcba6d7bc80649c71f4cb2e68acc33",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\cloud4 1.png",
+      "pageName": "Game Sheet"
+    },
+    "39:24": {
+      "name": "cloud7 1",
+      "imageRef": "e63f0c75b48c8f6a7911469889226d09e744f12c",
+      "localPath": "Assets/_Project/Art/Sprites\\Game Sheet\\cloud7 1.png",
       "pageName": "Game Sheet"
     }
   }

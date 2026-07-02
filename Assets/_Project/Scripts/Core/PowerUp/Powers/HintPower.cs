@@ -9,7 +9,7 @@ namespace TileMatch3.Core.PowerUp
         protected override void OnButtonClicked()
         {
             base.OnButtonClicked();
-            hintSystem.ExecuteHint();
+            _ = hintSystem.ExecuteHint();
         }
     }
 }

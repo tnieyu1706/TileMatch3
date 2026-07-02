@@ -6,7 +6,7 @@ namespace TileMatch3.Core.EffectSystem.Commands
 {
     public interface IEffectCommand
     {
-        void Execute(Vector3 position, float duration, Color color);
+        void Execute(Vector3 position, float duration, Color? color);
     }
 
     [Serializable]
@@ -15,7 +15,7 @@ namespace TileMatch3.Core.EffectSystem.Commands
         [Tooltip("Prefab VFX cần sinh ra")] public GameObject vfxPrefab;
 
         // Không cần lưu trữ state (_position, _duration...) bên trong class nữa
-        public void Execute(Vector3 position, float duration, Color color)
+        public void Execute(Vector3 position, float duration, Color? color)
         {
             if (vfxPrefab != null && Singleton<VFXPoolManager>.Instance != null)
             {
@@ -32,7 +32,7 @@ namespace TileMatch3.Core.EffectSystem.Commands
 
         [Range(0f, 1f)] public float volume = 1f;
 
-        public void Execute(Vector3 position, float duration, Color color)
+        public void Execute(Vector3 position, float duration, Color? color)
         {
             if (sfxClip != null && Singleton<SFXPoolManager>.Instance != null)
             {
