@@ -100,7 +100,7 @@ namespace TileMatch3.Core.BoardSystem
             return insertIndex;
         }
 
-        private void CheckAndMerge()
+        private void CheckAndMerge(bool checkRackFull)
         {
             int checkIndex = 0;
             for (int i = 1; i < rackTiles.Count; i++)
@@ -124,7 +124,7 @@ namespace TileMatch3.Core.BoardSystem
 
                     if (!isAlreadyMerging)
                     {
-                        MergeTilesAsync(checkIndex, i).Forget();
+                        MergeTilesAsync(checkIndex, i, checkRackFull).Forget();
                         return; // Xử lý 1 lần merge trước, nếu có nhiều bộ 3 sẽ check tiếp ở lần Push sau
                     }
                 }
@@ -136,7 +136,7 @@ namespace TileMatch3.Core.BoardSystem
             }
         }
 
-        private async UniTaskVoid MergeTilesAsync(int startIndex, int endIndex)
+        private async UniTaskVoid MergeTilesAsync(int startIndex, int endIndex, bool checkRackFull)
         {
             int range = endIndex - startIndex + 1; // 3
             TileRuntime[] mergeRange = new TileRuntime[range];
@@ -184,7 +184,7 @@ namespace TileMatch3.Core.BoardSystem
             }
 
             // Kiểm tra lại xem sau khi merge và collapse xong, rack có bị đầy không
-            if (IsRackFull())
+            if (checkRackFull && IsRackFull())
             {
                 OnRackFull();
             }
@@ -210,7 +210,7 @@ namespace TileMatch3.Core.BoardSystem
             return logicalCount >= slotNumber;
         }
 
-        public async void Push(TileRuntime tileRuntime)
+        public void Push(TileRuntime tileRuntime, bool checkRackFull = true)
         {
             tileRuntime.isOnRack = true;
 
@@ -226,7 +226,7 @@ namespace TileMatch3.Core.BoardSystem
                 onTileMoving?.Invoke(rackTiles[i], GetPositionForIndex(i), 0, false);
             }
             
-            CheckAndMerge();
+            CheckAndMerge(checkRackFull);
         }
 
         [CanBeNull]

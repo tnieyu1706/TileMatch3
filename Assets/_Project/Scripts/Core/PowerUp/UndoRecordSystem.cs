@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Reflex.Attributes;
 using Sirenix.OdinInspector;
 using TileMatch3.Core.BoardSystem;
@@ -42,6 +41,9 @@ namespace TileMatch3.Core.PowerUp
         private readonly List<TileUndoRecord> moveHistory = new List<TileUndoRecord>();
 
         public event Action<TileUndoRecord, TileRuntime> onTileUndone;
+        public event Action<int> onMoveHistoryCountChanged;
+        
+        public int MoveHistoryCount => moveHistory.Count;
 
         private void Start()
         {
@@ -49,10 +51,10 @@ namespace TileMatch3.Core.PowerUp
             rackController.onTileMergedData += RemoveMergedTilesFromRecord;
             globalData.Value.onPlayGame.AddListener(ClearRecord);
 
-            onTileUndone += OnTileUndone;
+            onTileUndone += ExecuteTileUndone;
         }
 
-        private void OnTileUndone(TileUndoRecord tileRecord, TileRuntime tileRuntime)
+        private void ExecuteTileUndone(TileUndoRecord tileRecord, TileRuntime tileRuntime)
         {
             int layer = Mathf.Abs(Mathf.RoundToInt(tileRecord.OriginalPosition.z));
             tileRuntime.SetSortingOrder(layer);
@@ -60,7 +62,7 @@ namespace TileMatch3.Core.PowerUp
 
         private void OnDestroy()
         {
-            onTileUndone -= OnTileUndone;
+            onTileUndone -= ExecuteTileUndone;
 
             if (boardController != null) boardController.onTileClick -= RecordMove;
             if (rackController != null) rackController.onTileMergedData -= RemoveMergedTilesFromRecord;
@@ -71,6 +73,7 @@ namespace TileMatch3.Core.PowerUp
         {
             // Bắt và lưu lại Position ban đầu trước khi Tile bị di chuyển đi
             moveHistory.Add(new TileUndoRecord(tile, tile.transform.position));
+            onMoveHistoryCountChanged?.Invoke(moveHistory.Count);
         }
 
         private void RemoveMergedTilesFromRecord(TileRuntime[] mergedTiles)
@@ -84,11 +87,14 @@ namespace TileMatch3.Core.PowerUp
                     moveHistory.RemoveAt(index);
                 }
             }
+
+            onMoveHistoryCountChanged?.Invoke(moveHistory.Count);
         }
 
         private void ClearRecord(int level)
         {
             moveHistory.Clear();
+            onMoveHistoryCountChanged?.Invoke(moveHistory.Count);
         }
 
         [Button]
@@ -104,11 +110,12 @@ namespace TileMatch3.Core.PowerUp
             TileUndoRecord lastRecord = moveHistory[lastIndex];
 
             TileRuntime poppedTile = rackController.Pop(lastRecord.Tile.TileId);
+            
+            moveHistory.RemoveAt(lastIndex);
+            onMoveHistoryCountChanged?.Invoke(moveHistory.Count);
 
             if (poppedTile != null)
             {
-                moveHistory.RemoveAt(lastIndex);
-
                 // Trả Data vào Core logic của Board
                 boardController.SetTileToBoard(poppedTile, true);
 
@@ -123,7 +130,6 @@ namespace TileMatch3.Core.PowerUp
             else
             {
                 Debug.LogWarning("Tile không còn tồn tại trên Rack để Undo, xóa khỏi lịch sử.");
-                moveHistory.RemoveAt(lastIndex);
             }
         }
 

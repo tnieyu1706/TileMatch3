@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Reflex.Attributes;
 using Sirenix.OdinInspector;
@@ -9,8 +10,6 @@ using TileMatch3.Core.Tile;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
-
-// Cần thêm để dùng UniTask trong Event
 
 namespace TileMatch3.Core.BoardSystem
 {
@@ -22,6 +21,7 @@ namespace TileMatch3.Core.BoardSystem
 
         [SerializeField] private TileRuntime tilePrefab;
         [SerializeField] private Transform boardRoot;
+        [SerializeField] private Transform spawnOffset;
 
         private LevelGeneratorConfig currentConfig;
         private readonly List<TileRuntime> activeTilesOnBoard = new List<TileRuntime>();
@@ -40,10 +40,7 @@ namespace TileMatch3.Core.BoardSystem
 
         public event Action<TileRuntime> onTileClick;
 
-        // Thêm event báo hiệu Board đã tạo xong (truyền List Tile qua để diễn)
         public event Action<List<TileRuntime>> OnBoardGenerated;
-
-        // Event truyền List Tile và 1 Action logic (chứa lệnh tráo data) sang cho Visual Controller
         public event Func<List<TileRuntime>, Action, UniTask> OnBoardShufflingAnim;
 
         private void Awake()
@@ -90,23 +87,13 @@ namespace TileMatch3.Core.BoardSystem
             currentLevelData = levelData;
             currentConfig = config;
 
-            // OnPreBoardGenerating?.Invoke();
-
             ClearBoard();
 
-            // 1. Tính toán toàn bộ các vị trí hợp lệ trên Board (Có zic-zac offset)
             List<Vector3> boardPositions = GetBoardTilePositions(levelData);
-
-            // 2. Spawn các cục Tile rỗng ra bàn dựa theo position
             SpawnEmptyTiles(boardPositions);
-
-            // 3. Chuẩn bị Data (Từng bộ 3) và gán vào các Tile rỗng trên bàn
             AssignTileDataAndShuffle();
-
-            // 4. Cập nhật trạng thái che khuất
             RefreshBoardState();
 
-            // 5. Bắn event cho Visual Controller diễn Animation Introduce
             OnBoardGenerated?.Invoke(activeTilesOnBoard);
         }
 
@@ -140,7 +127,7 @@ namespace TileMatch3.Core.BoardSystem
                             float posY = startY - (y * currentConfig.defaultTileSize.y) + randomOffsetY;
                             float posZ = -layer;
 
-                            positions.Add(new Vector3(posX, posY, posZ));
+                            positions.Add(new Vector3(posX, posY, posZ) + spawnOffset.position);
                         }
                     }
                 }
@@ -170,7 +157,7 @@ namespace TileMatch3.Core.BoardSystem
                 int layer = Mathf.Abs(Mathf.RoundToInt(pos.z));
                 newTile.name = $"Tile_L{layer}_{i}";
 
-                SetTileToBoard(newTile); // Sử dụng hàm SetTileToBoard để gắn sự kiện và thêm vào danh sách quản lý
+                SetTileToBoard(newTile);
             }
         }
 
@@ -194,13 +181,9 @@ namespace TileMatch3.Core.BoardSystem
                 activeTilesOnBoard[i].SetData(generatedDataList[i], layer);
             }
 
-            // Dùng hàm Shuffle ẩn (không bắn event Anim) để xáo trộn data lúc khởi tạo Board
             PerformShuffleLogic();
         }
 
-        /// <summary>
-        /// Tách logic đảo Data ra riêng để tái sử dụng
-        /// </summary>
         private void PerformShuffleLogic()
         {
             List<TileData> extractedData = new List<TileData>();
@@ -218,15 +201,9 @@ namespace TileMatch3.Core.BoardSystem
             }
         }
 
-        /// <summary>
-        /// Hàm này gọi bằng Power-Up: Có bắn event Animation
-        /// </summary>
         [Button]
         public async void ShuffleBoard()
         {
-            // OnBoardShuffling?.Invoke(); // Vẫn giữ cho các UI khác lắng nghe
-
-            // Gói toàn bộ logic tráo data + refresh trạng thái vào 1 Action
             Action shuffleLogic = () =>
             {
                 PerformShuffleLogic();
@@ -235,26 +212,27 @@ namespace TileMatch3.Core.BoardSystem
 
             if (OnBoardShufflingAnim != null)
             {
-                // Truyền Action sang bên Visual để nó tự canh thời gian kích hoạt (lúc đã thu nhỏ xong)
                 await OnBoardShufflingAnim.Invoke(activeTilesOnBoard, shuffleLogic);
             }
             else
             {
-                // Fallback nếu không gắn visual
                 shuffleLogic.Invoke();
             }
         }
 
-        private void HandleTileClicked(TileRuntime clickedTile)
+        // Đã thay đổi: Thêm tham số kiểm tra checkRackFull
+        private void HandleTileClicked(TileRuntime clickedTile, bool checkRackFull)
         {
-            if (rackController.IsRackFull()) return;
+            if (checkRackFull && rackController.IsRackFull()) return;
 
             clickedTile.OnTileClicked -= HandleTileClicked;
             activeTilesOnBoard.Remove(clickedTile);
 
+            // Bắn event ra ngoài (VD: Undo vẫn có thể bắt event này)
             onTileClick?.Invoke(clickedTile);
 
-            rackController.Push(clickedTile);
+            // Truyền cờ checkRackFull qua RackController
+            rackController.Push(clickedTile, checkRackFull);
             RefreshBoardState();
 
             if (activeTilesOnBoard.Count == 0)
@@ -267,7 +245,11 @@ namespace TileMatch3.Core.BoardSystem
         public void SetTileToBoard(TileRuntime tile, bool isRefreshBoard = false)
         {
             tile.isOnRack = false;
+            
+            // Đảm bảo không subscribe 2 lần
+            tile.OnTileClicked -= HandleTileClicked;
             tile.OnTileClicked += HandleTileClicked;
+            
             activeTilesOnBoard.Add(tile);
 
             if (isRefreshBoard)
@@ -323,6 +305,14 @@ namespace TileMatch3.Core.BoardSystem
             }
 
             activeTilesOnBoard.Clear();
+        }
+
+        /// <summary>
+        /// API Filter giúp truy xuất danh sách Tile đang có trên Board dựa theo điều kiện
+        /// </summary>
+        public List<TileRuntime> GetActiveTilesFilter(Func<TileRuntime, bool> filter)
+        {
+            return activeTilesOnBoard.Where(filter).ToList();
         }
     }
 }

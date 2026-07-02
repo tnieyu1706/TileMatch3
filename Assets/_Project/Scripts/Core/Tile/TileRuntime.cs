@@ -29,7 +29,8 @@ namespace TileMatch3.Core.Tile
 
         public bool IsActive => CurrentState == TileState.Normal && gameObject.activeSelf;
 
-        public event Action<TileRuntime> OnTileClicked;
+        // Đã thay đổi: Thêm tham số bool để báo hiệu có cần check Rack Full không
+        public event Action<TileRuntime, bool> OnTileClicked;
         public event Action<TileRuntime> OnTileNotAllowClicked;
 
         public void ResetTile()
@@ -70,7 +71,8 @@ namespace TileMatch3.Core.Tile
             switch (CurrentState)
             {
                 case TileState.Normal:
-                    OnTileClicked?.Invoke(this);
+                    // Click bình thường thì auto check full rack
+                    OnTileClicked?.Invoke(this, true);
                     break;
                 case TileState.Hidden:
                     // Bắn event báo hiệu Tile đang bị ẩn mà người chơi vẫn cố click
@@ -79,6 +81,13 @@ namespace TileMatch3.Core.Tile
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public void SimulateClick(bool checkRackFull)
+        {
+            if (isOnRack) return;
+            
+            OnTileClicked?.Invoke(this, checkRackFull);
         }
     }
 }

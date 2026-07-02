@@ -49,8 +49,6 @@ namespace TileMatch3.Core.IdleAnimationSystem
 
         private void OnSpecialDebounceTimerTick()
         {
-            Debug.Log("[IdleAnimationController.SpecialDebounce] Timer ticked. Playing idle animation.");
-
             if (specialAnimatedObjects == null || specialAnimatedObjects.Count == 0) return;
             
             IIdleAnimated idleAnimatedObject = specialAnimatedObjects[Random.Range(0, specialAnimatedObjects.Count)];
@@ -59,8 +57,6 @@ namespace TileMatch3.Core.IdleAnimationSystem
 
         private void OnDebounceTimerTick()
         {
-            Debug.Log("[IdleAnimationController.Debounce] Timer ticked. Playing idle animation.");
-
             if (tileAnimatedObjects == null || tileAnimatedObjects.Count == 0) return;
             
             var filterTiles = tileAnimatedObjects
